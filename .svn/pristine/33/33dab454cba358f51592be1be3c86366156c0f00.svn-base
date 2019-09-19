@@ -1,0 +1,41 @@
+package com.system.service.rt.impl;
+
+import com.system.mapper.RtDb;
+import com.system.pojo.rt.ExamRecord;
+import com.system.pojo.rt.Rt;
+import com.system.pojo.rt.Score;
+import com.system.pojo.rt.SubScore;
+import com.system.service.rt.RtService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import utils.ReqPage;
+
+import java.util.List;
+
+@Service
+public class RtServiceImpl implements RtService {
+
+    @Autowired
+    private RtDb rtDb;
+
+    @Override
+    public List<Rt> findRtList(ReqPage.QReqPage qReqPage, Integer examType) {
+        return rtDb.findRtList(qReqPage, examType);
+    }
+
+    @Override
+    public List<Score> findScoresByexId(ReqPage.QReqPage qReqPage, Integer examId, Integer isPass) {
+        return rtDb.findScoresByexId(qReqPage,examId,isPass);
+    }
+
+    @Override
+    public List<ExamRecord> findExamRecord(ReqPage page, Integer exId) {
+        return rtDb.findExamRecord(page,exId);
+    }
+
+    @Override
+    public List<SubScore> findExamRecordDateil(ReqPage page, Integer recordId, Integer result) {
+        return rtDb.findExamRecordDateil(page, recordId, result);
+    }
+
+}

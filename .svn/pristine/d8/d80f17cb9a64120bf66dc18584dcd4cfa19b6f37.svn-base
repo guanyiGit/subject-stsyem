@@ -1,0 +1,49 @@
+package com.system.controller;
+
+import com.system.entity.TExaminations;
+import com.system.mapper.TExaminationsMapper;
+import com.system.pojo.examination.ExaminationVo;
+import com.system.service.examination.ExaminationService;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import utils.R;
+import utils.ReqPage;
+
+import java.util.List;
+
+/**
+ *
+ * 考试Controller
+ * @author pengyu
+ * @Date 2019/6/20
+ * @Description
+ */
+@RestController
+@RequestMapping("/biz/examination")
+public class ExaminationController {
+
+    @Autowired
+    private ExaminationService examinationService;
+
+    /**
+     * 查询考试(考生)
+     * @param reqPage 分页参数
+     */
+    @GetMapping("/list")
+    public R getExaminations(ReqPage reqPage, @Param("examineeId")Integer examineeId){
+        try {
+            List<ExaminationVo> examinations = examinationService.getExaminations(reqPage, examineeId);
+            return R.ok(examinations);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error();
+        }
+    }
+
+    @PostMapping("")
+    public R getList(@RequestBody List<String> oldIds){
+        return  R.ok();
+    }
+
+}

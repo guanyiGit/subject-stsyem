@@ -1,0 +1,21 @@
+package com.system.mapper;
+
+import com.system.entity.TTestPaper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+public interface TTestPaperMapper {
+
+    int deleteByPrimaryKey(Integer paperId);
+
+    int insert(TTestPaper record);
+
+    int insertSelective(TTestPaper record);
+
+    TTestPaper selectByPrimaryKey(Integer paperId);
+
+    int updateByPrimaryKeySelective(TTestPaper record);
+
+    int updateByPrimaryKey(TTestPaper record);
+}

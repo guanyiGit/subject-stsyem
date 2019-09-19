@@ -1,0 +1,326 @@
+package com.system.service.testPaperLib.impl;
+
+import com.system.entity.TSubjectRefPaper;
+import com.system.entity.TTestPaper;
+import com.system.entity.testPaperLib.ParmQuestion;
+import com.system.entity.testPaperLib.QuestionSetScore;
+import com.system.entity.testPaperLib.TestPapperClassification;
+import com.system.mapper.TTestPaperMapper;
+import com.system.service.testPaperLib.TestPaperLibService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import utils.PageInfo;
+
+import java.rmi.ServerException;
+import java.util.*;
+
+@Service
+public class TestPaperLibServiceImpl implements TestPaperLibService {
+    @Autowired
+    TTestPaperMapper tTestPaperMapper;
+    @Override
+    public Map<String,Object> selectTTestPaperList(Integer paperType, Integer paperMode, String input, Integer num, Integer size) throws ServerException {
+        int start = 0;
+        Integer count = null;
+        PageInfo page = new PageInfo();
+        Map<String,Object> map = new HashMap<>();
+        if (num == null) {
+            start = 0;
+            page.setPageNum(1);
+        } else if (num.intValue() == 1) {
+            start = 0;
+        } else {
+            page.setPageNum(num);
+            start = (num - 1) * size;
+        }
+        if (size == null) {
+            size = (PageInfo.DefaultSize);
+            page.setPageSize(PageInfo.DefaultSize);
+        } else {
+            page.setPageSize(size);
+        }
+        List<TTestPaper> list = new ArrayList<TTestPaper>();
+        try {
+            list = tTestPaperMapper.selectTTestPaperList(paperType, paperMode, input, start, size);
+            count = tTestPaperMapper.selectTTestPaperCount(paperType, paperMode, input, start, size);
+            page.setTotalCount(count);
+            map.put("list",list);
+            map.put("total",count);
+        } catch (Exception e) {
+            String log = "查询犬试卷列表失败！";
+            throw new ServerException(log, e);
+        }
+        return map;
+    }
+
+    //查询题库每种类型或难度的数量
+    @Override
+    public Map<String, List<TestPapperClassification>> selectDifficultyOrTypeNum() throws ServerException{
+        Map<String, List<TestPapperClassification>> map = new HashMap<>();
+        List<TestPapperClassification> list1 = null;
+        List<TestPapperClassification> list2 = null;
+        try {
+            list1=tTestPaperMapper.selectTypeNum();
+            list2=tTestPaperMapper.selectDifficultyNum();
+            map.put("type",list1);
+            map.put("difficulty",list2);
+        } catch (Exception e) {
+            String log = "查询失败！";
+            throw new ServerException(log, e);
+        }
+        return map;
+    }
+
+    //查询随机抽选的题目id 也就是试卷试题关联表对象的集合
+    @Override
+    public List<TSubjectRefPaper> selectTSubjectRefPapers(ParmQuestion parmQuestion) throws ServerException {
+        List<TSubjectRefPaper> list = new ArrayList<TSubjectRefPaper>();
+        List<TestPapperClassification> typeList = parmQuestion.getTypeList();//存放不同类型的试题个数键值对
+        List<TestPapperClassification> difficultyList = parmQuestion.getDifficultyList();//存放不同难度的试题个数键值对
+        try {
+            if (typeList!=null && typeList.size()>0){
+                for (int i=0;i<typeList.size();i++){
+                    List<TSubjectRefPaper> listpaper1 = tTestPaperMapper.selectSubjectIdsByType(typeList.get(i).getType(),typeList.get(i).getSetNum());
+                    list.addAll(listpaper1);
+                }
+            }
+            if (difficultyList!=null && difficultyList.size()>0){
+                for (int i=0;i<difficultyList.size();i++){
+                    List<TSubjectRefPaper> listpaper2 = tTestPaperMapper.selectSubjectIdsByDifficulty(typeList.get(i).getType(),typeList.get(i).getSetNum());
+                    list.addAll(listpaper2);
+                }
+            }
+        } catch (Exception e) {
+            String log = "查询犬试卷列表失败！";
+            throw new ServerException(log, e);
+        }
+        return list;
+    }
+
+    /**
+     * 创建试卷设置题目分值列表查询
+     * @param parmQuestion
+     * @return
+     * @throws ServerException
+     */
+    @Override
+    public Map<String, Object> createTestPapperSetScoreList(ParmQuestion parmQuestion) throws ServerException {
+        List<Integer> subjectIds = new ArrayList<>();
+        for (int i=0;i<parmQuestion.gettSubjectRefPapers().size();i++){
+            Integer id=parmQuestion.gettSubjectRefPapers().get(i).getSubjectId();
+            subjectIds.add(id);
+        }
+        Integer num = parmQuestion.getNum();
+        Integer size = parmQuestion.getSize();
+        int start = 0;
+        Integer count = null;
+        PageInfo page = new PageInfo();
+        Map<String,Object> map = new HashMap<>();
+        if (num == null) {
+            start = 0;
+            page.setPageNum(1);
+        } else if (num.intValue() == 1) {
+            start = 0;
+        } else {
+            page.setPageNum(num);
+            start = (num - 1) * size;
+        }
+        if (size == null) {
+            size = (PageInfo.DefaultSize);
+            page.setPageSize(PageInfo.DefaultSize);
+        } else {
+            page.setPageSize(size);
+        }
+        List<QuestionSetScore> list = new ArrayList<QuestionSetScore>();
+        try {
+            list = tTestPaperMapper.createTestPapperSetScoreList(parmQuestion.getType(), parmQuestion.getDifficulty(), parmQuestion.getInput(), start, size,subjectIds);
+            count = tTestPaperMapper.createTestPapperSetScoreCount(parmQuestion.getType(), parmQuestion.getDifficulty(), parmQuestion.getInput(), start, size,subjectIds);
+            page.setTotalCount(count);
+            map.put("list",list);
+            map.put("total",count);
+        } catch (Exception e) {
+            String log = "查询创建试卷设置题目分值列表失败！";
+            throw new ServerException(log, e);
+        }
+        return map;
+    }
+
+    /**
+     * 创建试卷自选题左边列表
+     * @param parmQuestion
+     * @return
+     * @throws ServerException
+     */
+    @Override
+    public Map<String, Object> createTestPapperLeftList(ParmQuestion parmQuestion) throws ServerException {
+        List<Integer> subjectIds = new ArrayList<>();
+        for (int i=0;i<parmQuestion.gettSubjectRefPapers().size();i++){
+            subjectIds.add(parmQuestion.gettSubjectRefPapers().get(i).getSubjectId());
+        }
+        Integer num = parmQuestion.getNum();
+        Integer size = parmQuestion.getSize();
+        int start = 0;
+        Integer count = null;
+        PageInfo page = new PageInfo();
+        Map<String,Object> map = new HashMap<>();
+        if (num == null) {
+            start = 0;
+            page.setPageNum(1);
+        } else if (num.intValue() == 1) {
+            start = 0;
+        } else {
+            page.setPageNum(num);
+            start = (num - 1) * size;
+        }
+        if (size == null) {
+            size = (PageInfo.DefaultSize);
+            page.setPageSize(PageInfo.DefaultSize);
+        } else {
+            page.setPageSize(size);
+        }
+        List<QuestionSetScore> list = new ArrayList<QuestionSetScore>();
+        try {
+            list = tTestPaperMapper.createTestPapperNotInList(parmQuestion.getType(), parmQuestion.getDifficulty(), parmQuestion.getInput(), start, size,subjectIds);
+            count = tTestPaperMapper.createTestPapperNotInCount(parmQuestion.getType(), parmQuestion.getDifficulty(), parmQuestion.getInput(), start, size,subjectIds);
+            page.setTotalCount(count);
+            map.put("list",list);
+            map.put("total",count);
+        } catch (Exception e) {
+            String log = "查询创建试卷设置题目分值列表失败！";
+            throw new ServerException(log, e);
+        }
+        return map;
+    }
+    //创建试卷
+    @Transactional
+    @Override
+    public void insertTestPaper(ParmQuestion parmQuestion) throws ServerException {
+        List<TSubjectRefPaper> list = null;
+        parmQuestion.setPaperStatus(0);
+        parmQuestion.setPaperCreateTime(new Date());
+        list = parmQuestion.gettSubjectRefPapers();
+        try {
+            tTestPaperMapper.insertTestPaper(parmQuestion);
+            if (parmQuestion.getPaperId()!=null){
+                for (int i=0;i<list.size();i++){
+                    list.get(i).setPaperId(parmQuestion.getPaperId());
+                    list.get(i).setCreateTime(new Date());
+                }
+                tTestPaperMapper.insertSubjectRefPaper(list);
+            }
+        } catch (Exception e) {
+            String log = "创建试卷失败！";
+            throw new ServerException(log, e);
+        }
+    }
+
+    //复制试卷
+    @Transactional
+    @Override
+    public void copyTestPaper(Integer paperId,String paperName) throws ServerException {
+        List<TSubjectRefPaper> list = null;
+        TTestPaper tTestPaper = null;
+        try {
+            tTestPaper=tTestPaperMapper.selectByPrimaryKey(paperId);
+            tTestPaper.setPaperId(null);
+            tTestPaperMapper.insert(tTestPaper);
+            list = tTestPaperMapper.selectSubjectRefPaper(paperId);
+            for (int i=0;i<list.size();i++){
+                list.get(i).setPaperId(tTestPaper.getPaperId());
+            }
+            tTestPaperMapper.insertSubjectRefPaper(list);
+        } catch (Exception e) {
+            String log = "复制试卷失败！";
+            throw new ServerException(log, e);
+        }
+    }
+
+    //删除试卷
+    @Transactional
+    @Override
+    public void deleteTestPaper(List<Integer> paperIds) throws ServerException {
+        try {
+            tTestPaperMapper.deleteTestPaperInfo(paperIds);
+            tTestPaperMapper.deleteSubjectRefPaper(paperIds);
+        } catch (Exception e) {
+            String log = "删除试卷失败！";
+            throw new ServerException(log, e);
+        }
+    }
+
+    //查看试卷详情
+    @Override
+    public Map<String, Object> selectTestPaperInfo(Integer paperId, Integer paperMode, Integer difficulty, String input, Integer num, Integer size) throws ServerException {
+        List<QuestionSetScore> list = new ArrayList<QuestionSetScore>();
+        int start = 0;
+        Integer count = null;
+        PageInfo page = new PageInfo();
+        Map<String,Object> map = new HashMap<>();
+        if (num == null) {
+            start = 0;
+            page.setPageNum(1);
+        } else if (num.intValue() == 1) {
+            start = 0;
+        } else {
+            page.setPageNum(num);
+            start = (num - 1) * size;
+        }
+        if (size == null) {
+            size = (PageInfo.DefaultSize);
+            page.setPageSize(PageInfo.DefaultSize);
+        } else {
+            page.setPageSize(size);
+        }
+        try {
+            list = tTestPaperMapper.selectPaperSubjectList(paperId, paperMode, difficulty, input, start, size);
+            count = tTestPaperMapper.selectPaperSubjectCount(paperId, paperMode, difficulty, input, start, size);
+            page.setTotalCount(count);
+            map.put("list",list);
+            map.put("total",count);
+        } catch (Exception e) {
+            String log = "查看试卷详情失败！";
+            throw new ServerException(log, e);
+        }
+        return map;
+    }
+
+    //修改试卷要用的：差选某试卷的关联表信息
+    @Override
+    public List<TSubjectRefPaper> querySubjectRefPapers(Integer paperId) throws ServerException {
+        List<TSubjectRefPaper> list = null;
+        try {
+            list=tTestPaperMapper.selectSubjectRefPaperr(paperId);
+        } catch (Exception e) {
+            String log = "查询失败！";
+            throw new ServerException(log, e);
+        }
+        return list;
+    }
+
+    //修改试卷
+    @Transactional
+    @Override
+    public void updateTestPaper(ParmQuestion parmQuestion) throws ServerException {
+        List<Integer> paperIds = new ArrayList<>();
+        paperIds.add(parmQuestion.getPaperId());
+        List<TSubjectRefPaper> list = parmQuestion.gettSubjectRefPapers();
+        try {
+            tTestPaperMapper.deleteSubjectRefPaper(paperIds);
+            tTestPaperMapper.updateTestPaper(parmQuestion);
+                for (int i=0;i<list.size();i++){
+                    list.get(i).setPaperId(parmQuestion.getPaperId());
+                    list.get(i).setCreateTime(new Date());
+                }
+                tTestPaperMapper.insertSubjectRefPaper(list);
+        } catch (Exception e) {
+            String log = "修改试卷失败！";
+            throw new ServerException(log, e);
+        }
+    }
+
+    @Override
+    public String findPaperById(Integer id) {
+        return tTestPaperMapper.findPaperById(id);
+    }
+}

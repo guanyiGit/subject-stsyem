@@ -1,0 +1,50 @@
+package com.system.service.examination.impl;
+
+import com.system.entity.TExaminations;
+import com.system.entity.TRecord;
+import com.system.mapper.TExaminationsMapper;
+import com.system.mapper.TRecordMapper;
+import com.system.pojo.examination.ExaminationVo;
+import com.system.service.examination.ExaminationService;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import utils.R;
+import utils.ReqPage;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @author pengyu
+ * @Date 2019/6/20
+ * @Description
+ */
+@Service
+public class ExaminationServiceImpl implements ExaminationService {
+
+    @Autowired
+    private TExaminationsMapper examinationsMapper;
+
+    @Autowired
+    private TRecordMapper recordMapper;
+
+    @Override
+    public List<ExaminationVo> getExaminations(ReqPage reqPage, Integer examineeId) throws Exception{
+        List<TExaminations> examinations = examinationsMapper.findExaminations(reqPage);
+        List<ExaminationVo> examinationVos = new ArrayList<>();
+        examinations.stream().forEach( item ->{
+            ExaminationVo examinationVo = new ExaminationVo();
+            BeanUtils.copyProperties(item,examinationVo);
+            examinationVo.setCanJoin(true);
+
+            List<TRecord> records = recordMapper.findByExamineeIdAndExamId(examineeId, item.getExamId());
+            //答题次数不等于0且答题记录等于答题次数，不等继续答题
+            if (item.getAnswersNumber() != 0 && records.size() == item.getAnswersNumber()){
+                examinationVo.setCanJoin(false);
+            }
+            examinationVos.add(examinationVo);
+        });
+        return examinationVos;
+    }
+}

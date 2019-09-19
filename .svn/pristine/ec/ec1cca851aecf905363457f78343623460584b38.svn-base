@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.TExaminationsMapper" >
+  <resultMap id="BaseResultMap" type="com.system.entity.TExaminations" >
+    <id column="exam_id" property="examId" jdbcType="INTEGER" />
+    <result column="exam_type" property="examType" jdbcType="INTEGER" />
+    <result column="exam_name" property="examName" jdbcType="VARCHAR" />
+    <result column="paper_id" property="paperId" jdbcType="INTEGER" />
+    <result column="answers_number" property="answersNumber" jdbcType="INTEGER" />
+    <result column="exam_time" property="examTime" jdbcType="INTEGER" />
+    <result column="pass_score" property="passScore" jdbcType="INTEGER" />
+    <result column="echo_setting" property="echoSetting" jdbcType="INTEGER" />
+    <result column="effect_date" property="effectDate" jdbcType="TIMESTAMP" />
+    <result column="failure_date" property="failureDate" jdbcType="TIMESTAMP" />
+    <result column="exam_explain" property="examExplain" jdbcType="VARCHAR" />
+    <result column="exam_status" property="examStatus" jdbcType="INTEGER" />
+    <result column="exam_creater" property="examCreater" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    exam_id, exam_type, exam_name, paper_id, answers_number, exam_time, pass_score, echo_setting, 
+    effect_date, failure_date, exam_explain, exam_status, exam_creater, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_examinations
+    where exam_id = #{examId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_examinations
+    where exam_id = #{examId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.system.entity.TExaminations" >
+    insert into t_examinations (exam_id, exam_type, exam_name, 
+      paper_id, answers_number, exam_time, 
+      pass_score, echo_setting, effect_date, 
+      failure_date, exam_explain, exam_status, 
+      exam_creater, create_time)
+    values (#{examId,jdbcType=INTEGER}, #{examType,jdbcType=INTEGER}, #{examName,jdbcType=VARCHAR}, 
+      #{paperId,jdbcType=INTEGER}, #{answersNumber,jdbcType=INTEGER}, #{examTime,jdbcType=INTEGER}, 
+      #{passScore,jdbcType=INTEGER}, #{echoSetting,jdbcType=INTEGER}, #{effectDate,jdbcType=TIMESTAMP}, 
+      #{failureDate,jdbcType=TIMESTAMP}, #{examExplain,jdbcType=VARCHAR}, #{examStatus,jdbcType=INTEGER}, 
+      #{examCreater,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.entity.TExaminations" >
+    insert into t_examinations
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="examId != null" >
+        exam_id,
+      </if>
+      <if test="examType != null" >
+        exam_type,
+      </if>
+      <if test="examName != null" >
+        exam_name,
+      </if>
+      <if test="paperId != null" >
+        paper_id,
+      </if>
+      <if test="answersNumber != null" >
+        answers_number,
+      </if>
+      <if test="examTime != null" >
+        exam_time,
+      </if>
+      <if test="passScore != null" >
+        pass_score,
+      </if>
+      <if test="echoSetting != null" >
+        echo_setting,
+      </if>
+      <if test="effectDate != null" >
+        effect_date,
+      </if>
+      <if test="failureDate != null" >
+        failure_date,
+      </if>
+      <if test="examExplain != null" >
+        exam_explain,
+      </if>
+      <if test="examStatus != null" >
+        exam_status,
+      </if>
+      <if test="examCreater != null" >
+        exam_creater,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="examId != null" >
+        #{examId,jdbcType=INTEGER},
+      </if>
+      <if test="examType != null" >
+        #{examType,jdbcType=INTEGER},
+      </if>
+      <if test="examName != null" >
+        #{examName,jdbcType=VARCHAR},
+      </if>
+      <if test="paperId != null" >
+        #{paperId,jdbcType=INTEGER},
+      </if>
+      <if test="answersNumber != null" >
+        #{answersNumber,jdbcType=INTEGER},
+      </if>
+      <if test="examTime != null" >
+        #{examTime,jdbcType=INTEGER},
+      </if>
+      <if test="passScore != null" >
+        #{passScore,jdbcType=INTEGER},
+      </if>
+      <if test="echoSetting != null" >
+        #{echoSetting,jdbcType=INTEGER},
+      </if>
+      <if test="effectDate != null" >
+        #{effectDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="failureDate != null" >
+        #{failureDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="examExplain != null" >
+        #{examExplain,jdbcType=VARCHAR},
+      </if>
+      <if test="examStatus != null" >
+        #{examStatus,jdbcType=INTEGER},
+      </if>
+      <if test="examCreater != null" >
+        #{examCreater,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.system.entity.TExaminations" >
+    update t_examinations
+    <set >
+      <if test="examType != null" >
+        exam_type = #{examType,jdbcType=INTEGER},
+      </if>
+      <if test="examName != null" >
+        exam_name = #{examName,jdbcType=VARCHAR},
+      </if>
+      <if test="paperId != null" >
+        paper_id = #{paperId,jdbcType=INTEGER},
+      </if>
+      <if test="answersNumber != null" >
+        answers_number = #{answersNumber,jdbcType=INTEGER},
+      </if>
+      <if test="examTime != null" >
+        exam_time = #{examTime,jdbcType=INTEGER},
+      </if>
+      <if test="passScore != null" >
+        pass_score = #{passScore,jdbcType=INTEGER},
+      </if>
+      <if test="echoSetting != null" >
+        echo_setting = #{echoSetting,jdbcType=INTEGER},
+      </if>
+      <if test="effectDate != null" >
+        effect_date = #{effectDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="failureDate != null" >
+        failure_date = #{failureDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="examExplain != null" >
+        exam_explain = #{examExplain,jdbcType=VARCHAR},
+      </if>
+      <if test="examStatus != null" >
+        exam_status = #{examStatus,jdbcType=INTEGER},
+      </if>
+      <if test="examCreater != null" >
+        exam_creater = #{examCreater,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where exam_id = #{examId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.system.entity.TExaminations" >
+    update t_examinations
+    set exam_type = #{examType,jdbcType=INTEGER},
+      exam_name = #{examName,jdbcType=VARCHAR},
+      paper_id = #{paperId,jdbcType=INTEGER},
+      answers_number = #{answersNumber,jdbcType=INTEGER},
+      exam_time = #{examTime,jdbcType=INTEGER},
+      pass_score = #{passScore,jdbcType=INTEGER},
+      echo_setting = #{echoSetting,jdbcType=INTEGER},
+      effect_date = #{effectDate,jdbcType=TIMESTAMP},
+      failure_date = #{failureDate,jdbcType=TIMESTAMP},
+      exam_explain = #{examExplain,jdbcType=VARCHAR},
+      exam_status = #{examStatus,jdbcType=INTEGER},
+      exam_creater = #{examCreater,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where exam_id = #{examId,jdbcType=INTEGER}
+  </update>
+
+  <!--考试列表-->
+  <select id="findExamList" resultType="com.system.entity.TExaminations">
+      SELECT
+          *
+      FROM
+          t_examinations
+      <where>
+
+        <if test="type!=999">
+           exam_type = #{type}
+        </if>
+        <if test="status !=999">
+          AND exam_status = #{status}
+        </if>
+        <if test="searchKey !=null and searchKey != ''">
+         and exam_name LIKE CONCAT("%",#{searchKey},"%")
+        </if>
+      </where>
+    limit #{index},#{pageSize}
+  </select>
+
+  <!--考试总记录数-->
+  <select id="countExam" resultType="java.lang.Integer">
+    SELECT
+    count(*)
+    FROM
+    t_examinations
+    <where>
+      <if test="searchKey !=null and searchKey != ''">
+        exam_name LIKE CONCAT('%',#{searchKey},'%')
+      </if>
+      <if test="type !=999">
+        AND exam_type = #{type}
+      </if>
+      <if test="status !=999">
+        AND exam_status = #{status}
+      </if>
+    </where>
+  </select>
+
+  <!--查看考试-->
+  <select id="detail" resultType="com.system.VO.ExamVO">
+      SELECT
+          e.*, p.paper_name paperName
+      FROM
+          t_examinations e
+      LEFT JOIN `t_test_paper` p ON e.paper_id = p.paper_id
+      WHERE exam_id=#{id}
+  </select>
+</mapper>

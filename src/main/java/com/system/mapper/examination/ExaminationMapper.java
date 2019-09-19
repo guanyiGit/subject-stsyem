@@ -1,0 +1,19 @@
+package com.system.mapper.examination;
+
+import com.system.entity.TExaminations;
+import org.apache.ibatis.annotations.Param;
+import com.system.utils.ReqPage;
+
+import java.util.List;
+
+/**
+ * @author pengyu
+ * @Date 2019/6/20
+ * @Description
+ */
+public interface ExaminationMapper {
+
+    List<TExaminations> findExaminations(@Param("reqPage")ReqPage reqPage,@Param("examineeId")Integer examineeId);
+
+
+}

@@ -1,0 +1,34 @@
+package com.system.pojo.subject;
+
+import com.system.entity.TSubjectBank;
+import com.system.entity.TSubjectOption;
+
+import java.util.List;
+
+/**
+ * @author pengyu
+ * @Date 2019/6/20
+ * @Description
+ */
+public class SubjectVo extends TSubjectBank {
+
+    private Integer score;
+
+    List<TSubjectOption> options;
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public List<TSubjectOption> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<TSubjectOption> options) {
+        this.options = options;
+    }
+}

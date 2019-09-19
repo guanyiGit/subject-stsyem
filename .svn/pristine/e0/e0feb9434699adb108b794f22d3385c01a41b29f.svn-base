@@ -1,0 +1,28 @@
+package com.system.service.examination;
+
+import com.system.entity.TExaminations;
+import com.system.pojo.examination.ExaminationVo;
+import utils.R;
+import utils.ReqPage;
+
+import java.util.List;
+
+/**
+ * @author pengyu
+ * @Date 2019/6/20
+ * @Description
+ */
+public interface ExaminationService {
+
+     /**
+      * 考试查询(默认查询发布中，和已停止的考试)
+      * @param reqPage
+      * @return
+      * @throws Exception
+      */
+     List<ExaminationVo> getExaminations(ReqPage reqPage, Integer examineeId)throws Exception;
+
+
+
+
+}

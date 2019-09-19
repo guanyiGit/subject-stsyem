@@ -1,0 +1,95 @@
+package com.system.entity;
+
+import java.util.Date;
+
+public class TTestPaper {
+    private Integer paperId;
+
+    private Integer paperType;
+
+    private Integer paperMode;
+
+    private String paperName;
+
+    private Integer paperNumber;
+
+    private Integer paperTotalScore;
+
+    private Integer paperStatus;
+
+    private Integer paperCreater;
+
+    private Date paperCreateTime;
+
+    public Integer getPaperId() {
+        return paperId;
+    }
+
+    public void setPaperId(Integer paperId) {
+        this.paperId = paperId;
+    }
+
+    public Integer getPaperType() {
+        return paperType;
+    }
+
+    public void setPaperType(Integer paperType) {
+        this.paperType = paperType;
+    }
+
+    public Integer getPaperMode() {
+        return paperMode;
+    }
+
+    public void setPaperMode(Integer paperMode) {
+        this.paperMode = paperMode;
+    }
+
+    public String getPaperName() {
+        return paperName;
+    }
+
+    public void setPaperName(String paperName) {
+        this.paperName = paperName == null ? null : paperName.trim();
+    }
+
+    public Integer getPaperNumber() {
+        return paperNumber;
+    }
+
+    public void setPaperNumber(Integer paperNumber) {
+        this.paperNumber = paperNumber;
+    }
+
+    public Integer getPaperTotalScore() {
+        return paperTotalScore;
+    }
+
+    public void setPaperTotalScore(Integer paperTotalScore) {
+        this.paperTotalScore = paperTotalScore;
+    }
+
+    public Integer getPaperStatus() {
+        return paperStatus;
+    }
+
+    public void setPaperStatus(Integer paperStatus) {
+        this.paperStatus = paperStatus;
+    }
+
+    public Integer getPaperCreater() {
+        return paperCreater;
+    }
+
+    public void setPaperCreater(Integer paperCreater) {
+        this.paperCreater = paperCreater;
+    }
+
+    public Date getPaperCreateTime() {
+        return paperCreateTime;
+    }
+
+    public void setPaperCreateTime(Date paperCreateTime) {
+        this.paperCreateTime = paperCreateTime;
+    }
+}

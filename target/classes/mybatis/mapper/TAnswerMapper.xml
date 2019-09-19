@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.TAnswerMapper" >
+  <resultMap id="BaseResultMap" type="com.system.entity.TAnswer" >
+    <id column="answer_id" property="answerId" jdbcType="INTEGER" />
+    <result column="record_id" property="recordId" jdbcType="INTEGER" />
+    <result column="subject_id" property="subjectId" jdbcType="INTEGER" />
+    <result column="examinee_answer" property="examineeAnswer" jdbcType="VARCHAR" />
+    <result column="result" property="result" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.system.entity.TAnswer" extends="BaseResultMap" >
+    <result column="opinion" property="opinion" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    answer_id, record_id, subject_id, examinee_answer, result, create_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    opinion
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_answer
+    where answer_id = #{answerId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_answer
+    where answer_id = #{answerId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.system.entity.TAnswer" >
+    insert into t_answer (answer_id, record_id, subject_id,
+      examinee_answer, result, create_time,
+      opinion)
+    values (#{answerId,jdbcType=INTEGER}, #{recordId,jdbcType=INTEGER}, #{subjectId,jdbcType=INTEGER},
+      #{examineeAnswer,jdbcType=VARCHAR}, #{result,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+      #{opinion,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.entity.TAnswer" >
+    insert into t_answer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="answerId != null" >
+        answer_id,
+      </if>
+      <if test="recordId != null" >
+        record_id,
+      </if>
+      <if test="subjectId != null" >
+        subject_id,
+      </if>
+      <if test="examineeAnswer != null" >
+        examinee_answer,
+      </if>
+      <if test="result != null" >
+        result,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="opinion != null" >
+        opinion,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="answerId != null" >
+        #{answerId,jdbcType=INTEGER},
+      </if>
+      <if test="recordId != null" >
+        #{recordId,jdbcType=INTEGER},
+      </if>
+      <if test="subjectId != null" >
+        #{subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="examineeAnswer != null" >
+        #{examineeAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null" >
+        #{result,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="opinion != null" >
+        #{opinion,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.system.entity.TAnswer" >
+    update t_answer
+    <set >
+      <if test="recordId != null" >
+        record_id = #{recordId,jdbcType=INTEGER},
+      </if>
+      <if test="subjectId != null" >
+        subject_id = #{subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="examineeAnswer != null" >
+        examinee_answer = #{examineeAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null" >
+        result = #{result,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="opinion != null" >
+        opinion = #{opinion,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where answer_id = #{answerId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.system.entity.TAnswer" >
+    update t_answer
+    set record_id = #{recordId,jdbcType=INTEGER},
+      subject_id = #{subjectId,jdbcType=INTEGER},
+      examinee_answer = #{examineeAnswer,jdbcType=VARCHAR},
+      result = #{result,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where answer_id = #{answerId,jdbcType=INTEGER}
+  </update>
+
+  <insert id="answerAdd" parameterType="java.util.List">
+    insert into t_answer (answer_id, record_id, subject_id,
+      examinee_answer, result, create_time,
+      opinion)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.answerId,jdbcType=INTEGER}, #{item.recordId,jdbcType=INTEGER}, #{item.subjectId,jdbcType=INTEGER},
+      #{item.examineeAnswer,jdbcType=VARCHAR}, #{item.result,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP},
+      #{item.opinion,jdbcType=LONGVARCHAR})
+    </foreach>
+
+
+  </insert>
+</mapper>

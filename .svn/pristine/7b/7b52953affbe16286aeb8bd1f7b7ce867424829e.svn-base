@@ -1,0 +1,53 @@
+package com.system.service.examinee.impl;
+
+import com.system.entity.TExaminee;
+import com.system.errorCode.ExamineeErrorCode;
+import com.system.mapper.TExamineeMapper;
+import com.system.service.examinee.ExanineeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import utils.R;
+
+import java.util.Date;
+
+/**
+ * @author pengyu
+ * @Date 2019/6/20
+ * @Description
+ */
+@Service
+public class ExamineeServiceImpl implements ExanineeService {
+
+    @Autowired
+    private TExamineeMapper examineeMapper;
+
+    @Override
+    public R insertExaminee(TExaminee examinee) throws Exception {
+        examinee.setCreateTime(new Date());
+        examineeMapper.insertSelective(examinee);
+        return R.ok(examinee);
+    }
+
+    @Override
+    public TExaminee findExamineeByOpenId(String openId) throws Exception {
+        TExaminee tExaminee = examineeMapper.selectByOpenId(openId);
+        return tExaminee;
+    }
+
+    @Override
+    public R login(String name, String phone, String openId) throws Exception {
+        TExaminee examinee = examineeMapper.selectByPhone(phone);
+        if (examinee == null){
+            examinee = new TExaminee();
+            examinee.setName(name);
+            examinee.setPhone(phone);
+            examinee.setOpenid(openId);
+            R r = this.insertExaminee(examinee);
+            return r;
+        }
+        if (!examinee.getName().equals(name)){
+            return R.error(ExamineeErrorCode.COMMON_ACCOUNT_ERROR.getCode(),ExamineeErrorCode.COMMON_ACCOUNT_ERROR.getDesc());
+        }
+        return R.ok();
+    }
+}

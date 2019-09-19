@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.testPaper.TestPaperMapper">
+    <resultMap id="BaseResultMap" type="com.system.entity.TTestPaper">
+        <id column="paper_id" property="paperId" jdbcType="INTEGER"/>
+        <result column="paper_type" property="paperType" jdbcType="INTEGER"/>
+        <result column="paper_mode" property="paperMode" jdbcType="INTEGER"/>
+        <result column="paper_name" property="paperName" jdbcType="VARCHAR"/>
+        <result column="paper_number" property="paperNumber" jdbcType="INTEGER"/>
+        <result column="paper_total_score" property="paperTotalScore" jdbcType="INTEGER"/>
+        <result column="paper_status" property="paperStatus" jdbcType="INTEGER"/>
+        <result column="paper_creater" property="paperCreater" jdbcType="INTEGER"/>
+        <result column="paper_create_time" property="paperCreateTime" jdbcType="TIMESTAMP"/>
+        <result column="paperCreaterName" property="paperCreaterName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="TestPaperDetailMap" type="com.system.pojo.testPaper.TestPaperVo" extends="BaseResultMap">
+        <collection property="subjectVos" resultMap="com.system.mapper.TSubjectBankMapper.subjectVoMap"/>
+    </resultMap>
+
+    <select id="getTestPaperDetail" resultMap="TestPaperDetailMap">
+        select *
+        from t_test_paper tp
+        left join t_subject_ref_paper srp on tp.paper_id = srp.paper_id
+        left join t_subject_bank sb on srp.subject_id = sb.subject_id
+        left join t_subject_option so on so.subject_id = sb.subject_id
+        <where>
+            tp.paper_id =#{testPaperId}
+        </where>
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.TRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.system.entity.TRecord" >
+    <id column="record_id" property="recordId" jdbcType="INTEGER" />
+    <result column="examinee_id" property="examineeId" jdbcType="INTEGER" />
+    <result column="exam_id" property="examId" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+    <result column="is_pass" property="isPass" jdbcType="INTEGER" />
+    <result column="seq" property="seq" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <resultMap id="RecordVoMap" type="com.system.pojo.record.RecordVo" extends="BaseResultMap">
+    <collection property="activeSubject" resultMap="com.system.mapper.TAnswerMapper.ResultMapWithBLOBs"/>
+  </resultMap>
+
+
+  <sql id="Base_Column_List" >
+    record_id, examinee_id, exam_id, start_time, end_time, score, is_pass, seq, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_record
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_record
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.system.entity.TRecord" useGeneratedKeys="true" keyProperty="recordId">
+    insert into t_record (record_id, examinee_id, exam_id,
+      start_time, end_time, score, 
+      is_pass, seq, create_time
+      )
+    values (#{recordId,jdbcType=INTEGER}, #{examineeId,jdbcType=INTEGER}, #{examId,jdbcType=INTEGER}, 
+      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{score,jdbcType=INTEGER},
+      #{isPass,jdbcType=INTEGER}, #{seq,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.entity.TRecord" useGeneratedKeys="true" keyProperty="recordId">
+    insert into t_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="recordId != null" >
+        record_id,
+      </if>
+      <if test="examineeId != null" >
+        examinee_id,
+      </if>
+      <if test="examId != null" >
+        exam_id,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+      <if test="isPass != null" >
+        is_pass,
+      </if>
+      <if test="seq != null" >
+        seq,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="recordId != null" >
+        #{recordId,jdbcType=INTEGER},
+      </if>
+      <if test="examineeId != null" >
+        #{examineeId,jdbcType=INTEGER},
+      </if>
+      <if test="examId != null" >
+        #{examId,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="isPass != null" >
+        #{isPass,jdbcType=INTEGER},
+      </if>
+      <if test="seq != null" >
+        #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.system.entity.TRecord" >
+    update t_record
+    <set >
+      <if test="examineeId != null" >
+        examinee_id = #{examineeId,jdbcType=INTEGER},
+      </if>
+      <if test="examId != null" >
+        exam_id = #{examId,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="score != null" >
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="isPass != null" >
+        is_pass = #{isPass,jdbcType=INTEGER},
+      </if>
+      <if test="seq != null" >
+        seq = #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.system.entity.TRecord" >
+    update t_record
+    set examinee_id = #{examineeId,jdbcType=INTEGER},
+      exam_id = #{examId,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      score = #{score,jdbcType=INTEGER},
+      is_pass = #{isPass,jdbcType=INTEGER},
+      seq = #{seq,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </update>
+
+  <select id="findByExamineeIdAndExamId" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from t_record r
+    <where>
+    r.examinee_id = #{examineeId}
+    and r.exam_id = #{examId}
+    </where>
+ </select>
+
+  <select id="getRecordCount" resultType="int">
+    select count(*) from t_record r
+    <where>
+      r.examinee_id = #{examineeId}
+      and r.exam_id = #{examId}
+    </where>
+  </select>
+
+
+  <select id="getRecordVo"  resultMap="RecordVoMap">
+    select * from t_record r
+    left join t_answer a on r.record_id = a.record_id
+    <where>
+      r.exam_id = #{examId}
+      and r.examinee_id = #{examineeId}
+    </where>
+
+  </select>
+</mapper>

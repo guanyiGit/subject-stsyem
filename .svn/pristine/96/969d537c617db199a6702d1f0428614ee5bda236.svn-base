@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.TTestPaperMapper" >
+  <resultMap id="BaseResultMap" type="com.system.entity.TTestPaper" >
+    <id column="paper_id" property="paperId" jdbcType="INTEGER" />
+    <result column="paper_type" property="paperType" jdbcType="INTEGER" />
+    <result column="paper_mode" property="paperMode" jdbcType="INTEGER" />
+    <result column="paper_name" property="paperName" jdbcType="VARCHAR" />
+    <result column="paper_number" property="paperNumber" jdbcType="INTEGER" />
+    <result column="paper_total_score" property="paperTotalScore" jdbcType="INTEGER" />
+    <result column="paper_status" property="paperStatus" jdbcType="INTEGER" />
+    <result column="paper_creater" property="paperCreater" jdbcType="INTEGER" />
+    <result column="paper_create_time" property="paperCreateTime" jdbcType="TIMESTAMP" />
+    <result column="paperCreaterName" property="paperCreaterName" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    paper_id, paper_type, paper_mode, paper_name, paper_number, paper_total_score, paper_status, 
+    paper_creater, paper_create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_test_paper
+    where paper_id = #{paperId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_test_paper
+    where paper_id = #{paperId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.system.entity.TTestPaper" >
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="paperId">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_test_paper (paper_id, paper_type, paper_mode,
+      paper_name, paper_number, paper_total_score, 
+      paper_status, paper_creater, paper_create_time
+      )
+    values (#{paperId,jdbcType=INTEGER}, #{paperType,jdbcType=INTEGER}, #{paperMode,jdbcType=INTEGER}, 
+      #{paperName,jdbcType=VARCHAR}, #{paperNumber,jdbcType=INTEGER}, #{paperTotalScore,jdbcType=INTEGER}, 
+      #{paperStatus,jdbcType=INTEGER}, #{paperCreater,jdbcType=INTEGER}, #{paperCreateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.entity.TTestPaper" >
+    insert into t_test_paper
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="paperId != null" >
+        paper_id,
+      </if>
+      <if test="paperType != null" >
+        paper_type,
+      </if>
+      <if test="paperMode != null" >
+        paper_mode,
+      </if>
+      <if test="paperName != null" >
+        paper_name,
+      </if>
+      <if test="paperNumber != null" >
+        paper_number,
+      </if>
+      <if test="paperTotalScore != null" >
+        paper_total_score,
+      </if>
+      <if test="paperStatus != null" >
+        paper_status,
+      </if>
+      <if test="paperCreater != null" >
+        paper_creater,
+      </if>
+      <if test="paperCreateTime != null" >
+        paper_create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="paperId != null" >
+        #{paperId,jdbcType=INTEGER},
+      </if>
+      <if test="paperType != null" >
+        #{paperType,jdbcType=INTEGER},
+      </if>
+      <if test="paperMode != null" >
+        #{paperMode,jdbcType=INTEGER},
+      </if>
+      <if test="paperName != null" >
+        #{paperName,jdbcType=VARCHAR},
+      </if>
+      <if test="paperNumber != null" >
+        #{paperNumber,jdbcType=INTEGER},
+      </if>
+      <if test="paperTotalScore != null" >
+        #{paperTotalScore,jdbcType=INTEGER},
+      </if>
+      <if test="paperStatus != null" >
+        #{paperStatus,jdbcType=INTEGER},
+      </if>
+      <if test="paperCreater != null" >
+        #{paperCreater,jdbcType=INTEGER},
+      </if>
+      <if test="paperCreateTime != null" >
+        #{paperCreateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.system.entity.TTestPaper" >
+    update t_test_paper
+    <set >
+      <if test="paperType != null" >
+        paper_type = #{paperType,jdbcType=INTEGER},
+      </if>
+      <if test="paperMode != null" >
+        paper_mode = #{paperMode,jdbcType=INTEGER},
+      </if>
+      <if test="paperName != null" >
+        paper_name = #{paperName,jdbcType=VARCHAR},
+      </if>
+      <if test="paperNumber != null" >
+        paper_number = #{paperNumber,jdbcType=INTEGER},
+      </if>
+      <if test="paperTotalScore != null" >
+        paper_total_score = #{paperTotalScore,jdbcType=INTEGER},
+      </if>
+      <if test="paperStatus != null" >
+        paper_status = #{paperStatus,jdbcType=INTEGER},
+      </if>
+      <if test="paperCreater != null" >
+        paper_creater = #{paperCreater,jdbcType=INTEGER},
+      </if>
+      <if test="paperCreateTime != null" >
+        paper_create_time = #{paperCreateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where paper_id = #{paperId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.system.entity.TTestPaper" >
+    update t_test_paper
+    set paper_type = #{paperType,jdbcType=INTEGER},
+      paper_mode = #{paperMode,jdbcType=INTEGER},
+      paper_name = #{paperName,jdbcType=VARCHAR},
+      paper_number = #{paperNumber,jdbcType=INTEGER},
+      paper_total_score = #{paperTotalScore,jdbcType=INTEGER},
+      paper_status = #{paperStatus,jdbcType=INTEGER},
+      paper_creater = #{paperCreater,jdbcType=INTEGER},
+      paper_create_time = #{paperCreateTime,jdbcType=TIMESTAMP}
+    where paper_id = #{paperId,jdbcType=INTEGER}
+  </update>
+
+  <!--试卷列表-->
+  <select id="selectTTestPaperList" resultMap="BaseResultMap">
+      SELECT
+          A.paper_id,
+          A.paper_type,
+          A.paper_mode,
+          A.paper_name,
+          A.paper_number,
+          A.paper_total_score,
+          A.paper_status,
+          A.paper_creater,
+          A.paper_create_time,
+          B.username paperCreaterName
+      FROM
+          t_test_paper A
+      LEFT JOIN t_user B ON A.paper_creater = B.user_id
+      <where>
+        <if test="paperType != null">
+          A.paper_type=#{paperType}
+        </if>
+        <if test="paperMode != null">
+          and A.paper_mode=#{paperMode}
+        </if>
+        <if test="input != null">
+          and A.paper_name like '%${input}%'
+        </if>
+      </where>
+      ORDER BY A.paper_create_time DESC
+      LIMIT #{start},#{size}
+  </select>
+  <!--试卷列表总条数-->
+  <select id="selectTTestPaperCount" resultType="java.lang.Integer">
+    SELECT
+    COUNT(1) FROM t_test_paper A
+    <where>
+      <if test="paperType != null">
+        A.paper_type=#{paperType}
+      </if>
+      <if test="paperMode != null">
+        and A.paper_mode=#{paperMode}
+      </if>
+      <if test="input != null">
+        and A.paper_name like '%${input}%'
+      </if>
+    </where>
+  </select>
+
+  <!--查询题库每种类型题目的数量-->
+  <select id="selectTypeNum" resultType="com.system.entity.testPaperLib.TestPapperClassification">
+    SELECT COUNT(subject_id) num,subject_mode type FROM t_subject_bank GROUP BY subject_mode
+  </select>
+  <!--查询题库每种难度题目的数量-->
+  <select id="selectDifficultyNum" resultType="com.system.entity.testPaperLib.TestPapperClassification">
+    SELECT COUNT(subject_id) num,subject_difficulty type FROM t_subject_bank WHERE subject_mode=#{type} GROUP BY subject_difficulty
+  </select>
+  <!--根据试题类型查试题id集合-->
+  <select id="selectSubjectIdsByType" resultType="com.system.entity.TSubjectRefPaper">
+    select subject_id subjectId from t_subject_bank where subject_mode=#{type} ORDER BY RAND() LIMIT #{num}
+  </select>
+  <!--根据试题难度查试题id集合-->
+  <select id="selectSubjectIdsByDifficulty" resultType="com.system.entity.TSubjectRefPaper">
+    select subject_id subjectId from t_subject_bank where subject_difficulty=#{difficulty} and subject_mode=#{type} ORDER BY RAND() LIMIT #{num}
+  </select>
+  <!--创建试卷设置题目分值列表查询-->
+  <select id="createTestPapperSetScoreList" resultType="com.system.entity.testPaperLib.QuestionSetScore">
+    SELECT
+    subject_id subjectId,
+    sunject_type sunjectType,
+    subject_mode subjectMode,
+    subject_content subjectContent,
+    subject_difficulty subjectDifficulty
+    FROM t_subject_bank
+    WHERE subject_status in (0,1)
+    <if test="subjectIds.size() == 0">
+      AND subject_id = null
+    </if>
+    <if test="subjectIds != null and subjectIds.size() > 0">
+      AND subject_id in
+      <foreach collection="subjectIds" item="id" open="(" separator="," close=")">
+        #{id}
+      </foreach>
+    </if>
+    <if test="type != null">
+      and subject_mode = #{type}
+    </if>
+    <if test="difficulty != null">
+      and subject_difficulty = #{difficulty}
+    </if>
+    <if test="input != null">
+      and subject_content like '%${input}%'
+    </if>
+    LIMIT #{start},#{size}
+  </select>
+  <!--创建试卷设置题目分值列表总条数查询-->
+  <select id="createTestPapperSetScoreCount" resultType="java.lang.Integer">
+    SELECT
+    COUNT(1)
+    FROM t_subject_bank
+    WHERE subject_status in (0,1)
+    <if test="subjectIds.size() == 0">
+      AND subject_id = null
+    </if>
+    <if test="subjectIds != null and subjectIds.size() > 0">
+      AND subject_id in
+      <foreach collection="subjectIds" item="id" open="(" separator="," close=")">
+        #{id}
+      </foreach>
+    </if>
+    <if test="type != null">
+      and subject_mode = #{type}
+    </if>
+    <if test="difficulty != null">
+      and subject_difficulty = #{difficulty}
+    </if>
+    <if test="input != null">
+      and subject_content like '%${input}%'
+    </if>
+  </select>
+
+  <!--创建试卷自选题左边列表-->
+  <select id="createTestPapperNotInList" resultType="com.system.entity.testPaperLib.QuestionSetScore">
+    SELECT
+    subject_id subjectId,
+    sunject_type sunjectType,
+    subject_mode subjectMode,
+    subject_content subjectContent,
+    subject_difficulty subjectDifficulty
+    FROM t_subject_bank
+    WHERE subject_status in (0,1)
+    <if test="subjectIds != null and subjectIds.size() > 0">
+      AND subject_id not in
+      <foreach collection="subjectIds" item="id" open="(" separator="," close=")">
+        #{id}
+      </foreach>
+    </if>
+    <if test="type != null">
+      and subject_mode = #{type}
+    </if>
+    <if test="difficulty != null">
+      and subject_difficulty = #{difficulty}
+    </if>
+    <if test="input != null">
+      and subject_content like '%${input}%'
+    </if>
+    LIMIT #{start},#{size}
+  </select>
+  <!--创建试卷自选题左边列表总数-->
+  <select id="createTestPapperNotInCount" resultType="java.lang.Integer">
+    SELECT
+    COUNT(1)
+    FROM t_subject_bank
+    WHERE subject_status in (0,1)
+    <if test="subjectIds != null and subjectIds.size() > 0">
+      AND subject_id not in
+      <foreach collection="subjectIds" item="id" open="(" separator="," close=")">
+        #{id}
+      </foreach>
+    </if>
+    <if test="type != null">
+      and subject_mode = #{type}
+    </if>
+    <if test="difficulty != null">
+      and subject_difficulty = #{difficulty}
+    </if>
+    <if test="input != null">
+      and subject_content like '%${input}%'
+    </if>
+  </select>
+  <!--插入试卷表信息-->
+  <insert id="insertTestPaper" parameterType="com.system.entity.testPaperLib.ParmQuestion" >
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="paperId">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_test_paper (paper_type, paper_mode,
+      paper_name, paper_number, paper_total_score,
+      paper_status, paper_creater, paper_create_time
+      )
+    values (#{paperType,jdbcType=INTEGER}, #{paperMode,jdbcType=INTEGER},
+      #{paperName,jdbcType=VARCHAR}, #{paperNumber,jdbcType=INTEGER}, #{paperTotalScore,jdbcType=INTEGER},
+      #{paperStatus,jdbcType=INTEGER}, #{paperCreater,jdbcType=INTEGER}, #{paperCreateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <!--插入试卷试题关联表信息-->
+  <insert id="insertSubjectRefPaper" parameterType="java.util.List" useGeneratedKeys="false">
+    insert into t_subject_ref_paper (subject_id, paper_id, score, create_time)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (
+      #{item.subjectId},
+      #{item.paperId},
+      #{item.score},
+      #{item.createTime}
+      )
+    </foreach>
+  </insert>
+
+  <!--根据试卷id查询试题关联表信息-->
+  <select id="selectSubjectRefPaper" resultType="com.system.entity.TSubjectRefPaper">
+    SELECT subject_id subjectId, score, NOW() createTime FROM t_subject_ref_paper where paper_id=#{paperId}
+  </select>
+  <!--根据试卷id查询试题关联表信息-->
+  <select id="selectSubjectRefPaperr" resultType="com.system.entity.TSubjectRefPaper">
+    SELECT subject_id subjectId FROM t_subject_ref_paper where paper_id=#{paperId}
+  </select>
+  <!--删除试卷表信息-->
+  <delete id="deleteTestPaperInfo">
+    DELETE FROM t_test_paper WHERE paper_id IN
+    <foreach collection="paperIds" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </delete>
+  <!--删除试卷试题关联表信息-->
+  <delete id="deleteSubjectRefPaper">
+    DELETE FROM t_subject_ref_paper WHERE paper_id IN
+    <foreach collection="paperIds" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </delete>
+
+  <!--查看试卷详情试题列表-->
+  <select id="selectPaperSubjectList" resultType="com.system.entity.testPaperLib.QuestionSetScore">
+    SELECT
+    B.subject_id subjectId,
+    B.sunject_type sunjectType,
+    B.subject_mode subjectMode,
+    B.subject_content subjectContent,
+    B.subject_difficulty subjectDifficulty,
+    A.score
+    FROM t_subject_ref_paper A
+    LEFT JOIN t_subject_bank B
+    ON A.subject_id=B.subject_id
+    WHERE A.paper_id=#{paperId}
+    <if test="paperMode != null">
+      and B.subject_mode = #{paperMode}
+    </if>
+    <if test="difficulty != null">
+      and B.subject_difficulty = #{difficulty}
+    </if>
+    <if test="input != null">
+      and B.subject_content like '%${input}%'
+    </if>
+    LIMIT #{start},#{size}
+  </select>
+  <!--查看试卷详情试题列表总数-->
+  <select id="selectPaperSubjectCount" resultType="java.lang.Integer">
+    SELECT
+    COUNT(1)
+    FROM t_subject_ref_paper A
+    LEFT JOIN t_subject_bank B
+    ON A.subject_id=B.subject_id
+    WHERE A.paper_id=#{paperId}
+    <if test="paperMode != null">
+      and B.subject_mode = #{paperMode}
+    </if>
+    <if test="difficulty != null">
+      and B.subject_difficulty = #{difficulty}
+    </if>
+    <if test="input != null">
+      and B.subject_content like '%${input}%'
+    </if>
+  </select>
+
+  <!--修改试卷表信息-->
+  <update id="updateTestPaper" parameterType="com.system.entity.testPaperLib.ParmQuestion">
+    update t_test_paper
+    <set >
+      <if test="paperType != null" >
+        paper_type = #{paperType,jdbcType=INTEGER},
+      </if>
+      <if test="paperMode != null" >
+        paper_mode = #{paperMode,jdbcType=INTEGER},
+      </if>
+      <if test="paperName != null" >
+        paper_name = #{paperName,jdbcType=VARCHAR},
+      </if>
+      <if test="paperNumber != null" >
+        paper_number = #{paperNumber,jdbcType=INTEGER},
+      </if>
+      <if test="paperTotalScore != null" >
+        paper_total_score = #{paperTotalScore,jdbcType=INTEGER},
+      </if>
+      <if test="paperStatus != null" >
+        paper_status = #{paperStatus,jdbcType=INTEGER},
+      </if>
+      <if test="paperCreater != null" >
+        paper_creater = #{paperCreater,jdbcType=INTEGER},
+      </if>
+      <if test="paperCreateTime != null" >
+        paper_create_time = #{paperCreateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where paper_id = #{paperId,jdbcType=INTEGER}
+  </update>
+
+  <!--根据-->
+</mapper>

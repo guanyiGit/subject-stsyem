@@ -1,0 +1,15 @@
+package com.system.VO;
+
+import com.system.entity.TExaminations;
+
+public class ExamVO extends TExaminations {
+    private String paperName;
+
+    public String getPaperName() {
+        return paperName;
+    }
+
+    public void setPaperName(String paperName) {
+        this.paperName = paperName;
+    }
+}

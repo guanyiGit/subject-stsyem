@@ -1,0 +1,97 @@
+package com.system.mapper;
+
+import com.system.pojo.rt.ExamRecord;
+import com.system.pojo.rt.Rt;
+import com.system.pojo.rt.Score;
+import com.system.pojo.rt.SubScore;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultType;
+import utils.ReqPage;
+
+import java.util.List;
+@Mapper
+public interface RtDb {
+
+
+    @ResultType(value = Rt.class)
+    /**
+     * 查考试列表
+     *
+     * @param qReqPage 分页
+     * @param examType 考试分类 --> 0.交通法考试 1民法考试 ....（待定）
+     * @return
+     */
+    List<Rt> findRtList(@Param("qReqPage") ReqPage.QReqPage qReqPage, @Param("examType") Integer examType);
+
+    /**
+     * 查考试列表 count
+     *
+     * @param qReqPage 分页
+     * @param examType 考试分类 --> 0.交通法考试 1民法考试 ....（待定）
+     * @return
+     */
+    Integer findRtListCount(ReqPage.QReqPage qReqPage, Integer examType);
+
+    /**
+     * 查成绩列表
+     *
+     * @param qReqPage 分页
+     * @param examId   所属考试id
+     * @param isPass   是否及格 0.及格 1.未及格
+     * @return
+     */
+    List<Score> findScoresByexId(@Param("qReqPage") ReqPage.QReqPage qReqPage, @Param("examId") Integer examId, @Param("isPass") Integer isPass);
+
+    /**
+     * 查成绩列表 count
+     *
+     * @param qReqPage 分页
+     * @param examId   所属考试id
+     * @param isPass   是否及格 0.及格 1.未及格
+     * @return
+     */
+    Integer findScoresByexIdCount(@Param("qReqPage") ReqPage.QReqPage qReqPage, @Param("examId") Integer examId, @Param("isPass") Integer isPass);
+
+
+    /**
+     * 查看考试记录列表
+     *
+     * @param page 分页
+     * @param exId 考生id
+     * @return
+     */
+    List<ExamRecord> findExamRecord(@Param("page") ReqPage page, @Param("exId") Integer exId);
+
+    /**
+     * 查看考试记录列表 count
+     *
+     * @param page 分页
+     * @param exId 考生id
+     * @return
+     */
+    Integer findExamRecordCount(ReqPage page, Integer exId);
+
+
+    /**
+     * 查看考试结果明细
+     *
+     * @param page     分页
+     * @param recordId 考试记录id
+     * @param result   考试结果 0.正确 1.错误
+     * @return
+     */
+    List<SubScore> findExamRecordDateils(@Param("page") ReqPage page, @Param("recordId") Integer recordId, @Param("result") Integer result);
+
+    /**
+     * 查看考试结果明细 count
+     *
+     * @param page     分页
+     * @param recordId 考试记录id
+     * @param result   考试结果 0.正确 1.错误
+     * @return
+     */
+    Integer findExamRecordDateilsCount(@Param("page") ReqPage page, @Param("recordId") Integer recordId, @Param("result") Integer result);
+
+
+}

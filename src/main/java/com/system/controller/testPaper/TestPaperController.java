@@ -1,0 +1,35 @@
+package com.system.controller.testPaper;
+
+import com.system.pojo.testPaper.TestPaperVo;
+import com.system.service.testPaperLib.TestPaperService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import com.system.utils.R;
+
+/**
+ * @author pengyu
+ * @Date 2019/6/20
+ * @Description
+ */
+@RestController
+@RequestMapping("/biz/test_paper")
+public class TestPaperController  {
+
+    @Autowired
+    private TestPaperService testPaperService;
+
+    @GetMapping("/{testPaperId}")
+    public R getTestPaperDetail(@PathVariable Integer testPaperId){
+        try {
+            TestPaperVo testPaperDetail = testPaperService.getTestPaperDetail(testPaperId);
+            return R.ok(testPaperDetail);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error();
+        }
+    }
+
+}

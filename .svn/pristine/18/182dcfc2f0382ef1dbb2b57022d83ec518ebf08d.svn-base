@@ -1,0 +1,47 @@
+package com.system.service.examinee.impl;
+
+import com.system.entity.TExaminee;
+import com.system.errorCode.ExamineeErrorCode;
+import com.system.mapper.TExamineeMapper;
+import com.system.service.examinee.ExanineeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import utils.R;
+
+import java.util.Date;
+
+/**
+ * @author pengyu
+ * @Date 2019/6/20
+ * @Description
+ */
+@Service
+public class ExamineeServiceImpl implements ExanineeService {
+
+    @Autowired
+    private TExamineeMapper examineeMapper;
+
+    @Override
+    public R insertExaminee(TExaminee examinee) throws Exception {
+        Integer id = null;
+        String phone = examinee.getPhone();
+        if (phone == null || phone.equals("")) {
+            return R.error(ExamineeErrorCode.COMMON_PARAM_EMPTY.getCode(), ExamineeErrorCode.COMMON_PARAM_EMPTY.getDesc());
+        }
+        //根据电话查看考生id
+        id = examineeMapper.findExamineeByPhone(phone);
+        if (id != null) {
+            return R.error(ExamineeErrorCode.COMMON_EXIT.getCode(), ExamineeErrorCode.COMMON_EXIT.getDesc());
+        }
+        examinee.setCreateTime(new Date());
+        examineeMapper.insertSelective(examinee);
+        id = examinee.getId();
+        return R.ok(id);
+    }
+
+    @Override
+    public TExaminee findExamineeByOpenId(String openId) throws Exception {
+        TExaminee tExaminee = examineeMapper.selectByOpenId(openId);
+        return tExaminee;
+    }
+}

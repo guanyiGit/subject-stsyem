@@ -1,0 +1,87 @@
+package com.system.controller.result;
+
+import com.system.service.rt.RtService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import utils.R;
+import utils.ReqPage;
+
+@RestController
+@RequestMapping("/exam")
+public class RtController {
+
+    @Autowired
+    private RtService rtService;
+
+    /**
+     * 查考试列表
+     *
+     * @param qReqPage 分页
+     * @param examType 考试分类 --> 0.交通法考试 1民法考试 ....（待定）
+     * @return
+     */
+    @GetMapping("/list")
+    public R list(ReqPage.QReqPage qReqPage, @RequestParam(required = false) Integer examType) {
+        try {
+            return R.ok(rtService.findRtList(qReqPage, examType));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 查成绩列表
+     *
+     * @param qReqPage 分页
+     * @param examId   所属考试id
+     * @param isPass   是否及格 0.及格 1.未及格
+     * @return
+     */
+    @GetMapping("/score/{examId}")
+    public R scores(ReqPage.QReqPage qReqPage, @PathVariable Integer examId, @RequestParam(required = false) Integer isPass) {
+        try {
+            return R.ok(rtService.findScoresByexId(qReqPage, examId, isPass));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 查看我的考试记录列表
+     *
+     * @param page 分页
+     * @param exId 考生id
+     * @return
+     */
+    @GetMapping("/exam/{exId}")
+    public R scores(ReqPage page, @PathVariable Integer exId) {
+        try {
+            return R.ok(rtService.findExamRecord(page, exId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 查看考试结果明细
+     *
+     * @param page     分页
+     * @param recordId 考试记录id
+     * @param result   考试结果 0.正确 1.错误
+     * @return
+     */
+    @GetMapping("/exam/details/{recordId}")
+    public R scores(ReqPage page, @PathVariable Integer recordId, @RequestParam(required = false) Integer result) {
+        try {
+            return R.ok(rtService.findExamRecordDateil(page, recordId,result));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error(e.getMessage());
+        }
+    }
+
+
+}

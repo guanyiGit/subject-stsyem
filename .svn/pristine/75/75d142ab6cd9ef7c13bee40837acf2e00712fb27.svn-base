@@ -1,0 +1,48 @@
+package com.system.service.rt.impl;
+
+import com.github.pagehelper.PageInfo;
+import com.system.mapper.RtDb;
+import com.system.pojo.rt.ExamRecord;
+import com.system.pojo.rt.Rt;
+import com.system.pojo.rt.Score;
+import com.system.pojo.rt.SubScore;
+import com.system.service.rt.RtService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.system.utils.ReqPage;
+
+@Service
+public class RtServiceImpl implements RtService {
+
+    @Autowired
+    private RtDb rtDb;
+
+    @Override
+    public PageInfo<Rt> findRtList(ReqPage.QReqPage qReqPage, Integer examType) {
+        PageInfo<Rt> page = new PageInfo<>(rtDb.findRtList(qReqPage, examType));
+        page.setTotal(rtDb.findRtListCount(qReqPage, examType));
+        return page;
+    }
+
+    @Override
+    public PageInfo<Score> findScoresByexId(ReqPage.QReqPage qReqPage, Integer examId, Integer isPass) {
+        PageInfo<Score> page = new PageInfo<>(rtDb.findScoresByexId(qReqPage, examId, isPass));
+        page.setTotal(rtDb.findScoresByexIdCount(qReqPage, examId, isPass));
+        return page;
+    }
+
+    @Override
+    public PageInfo<ExamRecord> findExamRecord(ReqPage page, Integer exId) {
+        PageInfo<ExamRecord> pageInfo = new PageInfo<>(rtDb.findExamRecord(page, exId));
+        pageInfo.setTotal(rtDb.findExamRecordCount(page, exId));
+        return pageInfo;
+    }
+
+    @Override
+    public PageInfo<SubScore> findExamRecordDateil(ReqPage page, Integer recordId, Integer result) {
+        PageInfo<SubScore> pageInfo = new PageInfo<>(rtDb.findExamRecordDateils(page, recordId, result));
+        pageInfo.setTotal(rtDb.findExamRecordDateilsCount(page, recordId, result));
+        return pageInfo;
+    }
+
+}

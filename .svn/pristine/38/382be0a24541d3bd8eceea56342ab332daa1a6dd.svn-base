@@ -1,0 +1,21 @@
+package com.system.mapper;
+
+import com.system.entity.TUser;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+public interface TUserMapper {
+
+    int deleteByPrimaryKey(Integer userId);
+
+    int insert(TUser record);
+
+    int insertSelective(TUser record);
+
+    TUser selectByPrimaryKey(Integer userId);
+
+    int updateByPrimaryKeySelective(TUser record);
+
+    int updateByPrimaryKey(TUser record);
+}

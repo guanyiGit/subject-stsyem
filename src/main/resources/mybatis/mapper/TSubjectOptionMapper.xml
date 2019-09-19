@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.TSubjectOptionMapper" >
+  <resultMap id="BaseResultMap" type="com.system.entity.TSubjectOption" >
+    <id column="option_id" property="optionId" jdbcType="INTEGER" />
+    <result column="subject_id" property="subjectId" jdbcType="INTEGER" />
+    <result column="option_number" property="optionNumber" jdbcType="VARCHAR" />
+    <result column="option_value" property="optionValue" jdbcType="VARCHAR" />
+    <result column="is_true" property="isTrue" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    option_id, subject_id, option_number, option_value, is_true, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from t_subject_option
+    where option_id = #{optionId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_subject_option
+    where option_id = #{optionId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.system.entity.TSubjectOption" >
+    insert into t_subject_option (option_id, subject_id, option_number,
+      option_value, is_true, create_time
+      )
+    values (#{optionId,jdbcType=INTEGER}, #{subjectId,jdbcType=INTEGER}, #{optionNumber,jdbcType=VARCHAR},
+      #{optionValue,jdbcType=VARCHAR}, #{isTrue,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.entity.TSubjectOption" >
+    insert into t_subject_option
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="optionId != null" >
+        option_id,
+      </if>
+      <if test="subjectId != null" >
+        subject_id,
+      </if>
+      <if test="optionNumber != null" >
+        option_number,
+      </if>
+      <if test="optionValue != null" >
+        option_value,
+      </if>
+      <if test="isTrue != null" >
+        is_true,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="optionId != null" >
+        #{optionId,jdbcType=INTEGER},
+      </if>
+      <if test="subjectId != null" >
+        #{subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="optionNumber != null" >
+        #{optionNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="optionValue != null" >
+        #{optionValue,jdbcType=VARCHAR},
+      </if>
+      <if test="isTrue != null" >
+        #{isTrue,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.system.entity.TSubjectOption" >
+    update t_subject_option
+    <set >
+      <if test="subjectId != null" >
+        subject_id = #{subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="optionNumber != null" >
+        option_number = #{optionNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="optionValue != null" >
+        option_value = #{optionValue,jdbcType=VARCHAR},
+      </if>
+      <if test="isTrue != null" >
+        is_true = #{isTrue,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where option_id = #{optionId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.system.entity.TSubjectOption" >
+    update t_subject_option
+    set subject_id = #{subjectId,jdbcType=INTEGER},
+      option_number = #{optionNumber,jdbcType=VARCHAR},
+      option_value = #{optionValue,jdbcType=VARCHAR},
+      is_true = #{isTrue,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where option_id = #{optionId,jdbcType=INTEGER}
+  </update>
+</mapper>

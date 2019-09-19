@@ -1,0 +1,19 @@
+package com.system.service.exam;
+
+import com.system.VO.ExamVO;
+import com.system.entity.TExaminations;
+
+import java.util.Map;
+
+public interface ExamService {
+
+    Map<String, Object> findExamList(Integer pageNum,Integer pageSize,Integer type,Integer status,String searchKey);
+
+    int insert(TExaminations examinations);
+
+    int update(TExaminations examinations);
+
+    int delete(Integer id);
+
+    ExamVO detail(Integer id);
+}

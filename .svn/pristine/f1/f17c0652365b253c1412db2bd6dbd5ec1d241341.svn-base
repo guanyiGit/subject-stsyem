@@ -1,0 +1,19 @@
+package com.system.mapper;
+
+import com.system.entity.TAnswer;
+
+
+public interface TAnswerMapper {
+
+    int deleteByPrimaryKey(Integer answerId);
+
+    int insert(TAnswer record);
+
+    int insertSelective(TAnswer record);
+
+    TAnswer selectByPrimaryKey(Integer answerId);
+
+    int updateByPrimaryKeySelective(TAnswer record);
+
+    int updateByPrimaryKey(TAnswer record);
+}

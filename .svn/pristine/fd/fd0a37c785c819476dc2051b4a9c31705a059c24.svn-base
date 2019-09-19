@@ -1,0 +1,20 @@
+package com.system.service.user;
+
+import com.system.VO.UserVO;
+import com.system.entity.TRole;
+import com.system.entity.TUser;
+
+import java.util.List;
+import java.util.Map;
+
+public interface UserService {
+    Map<String, Object> findUserList(Integer pageNum, Integer pageSize, Integer role, String searchKey);
+
+    int insert(TUser user);
+
+    int update(TUser user);
+
+    UserVO detail(Integer id);
+
+    List<TRole> findRoleList();
+}

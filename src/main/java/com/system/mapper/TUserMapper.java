@@ -1,0 +1,42 @@
+package com.system.mapper;
+
+import com.system.VO.UpdateUserStatusVO;
+import com.system.VO.UserVO;
+import com.system.entity.TExaminations;
+import com.system.entity.TRole;
+import com.system.entity.TUser;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
+
+@Mapper
+public interface TUserMapper {
+
+    int deleteByPrimaryKey(Integer userId);
+
+    int insert(TUser record);
+
+    int insertSelective(TUser record);
+
+    TUser selectByPrimaryKey(Integer userId);
+
+    int updateByPrimaryKeySelective(TUser record);
+
+    int updateByPrimaryKey(TUser record);
+
+    List<UserVO> findUserList(Map<String,Object>map);
+
+    Integer countUser(Map<String,Object>map);
+
+    UserVO detail(Integer id);
+
+    List<TRole> findRoleList();
+    //根据电话号码查找用户
+    int selectUserByPhone(@Param("phone") String phone);
+
+    int updateStatus(UpdateUserStatusVO vo);
+    //登陆
+    TUser login(String name);
+}

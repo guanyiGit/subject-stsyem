@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="container">
+        <img src="http://61.133.232.110:8088/pic/group1/M00/00/00/rBilfF1Iy1KAd0StAAAqJnw2GMI222.png">
+        <div class="container-title">404</div>
+        <div class="container-des">PC端与旧版本微信暂不支持小程序，请在手机端使用</div>
+    </div>
+
+</body>
+
+<style>
+    .container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .container>img{
+        width: 20%;
+        height: 20%;
+    }
+
+    .container-title {
+        font-size: 45px;
+        color: #DEB46C;
+        font-weight: 800;
+    }
+
+    .container-des {
+        font-size: 18px;
+        margin-top: 20px;
+    }
+
+</style>
+
+</html>

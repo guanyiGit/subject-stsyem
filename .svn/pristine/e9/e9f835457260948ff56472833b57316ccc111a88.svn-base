@@ -1,0 +1,35 @@
+package com.system.service.wor;
+
+import com.system.entity.TSubjectBank;
+import com.system.entity.TSubjectOption;
+import com.system.pojo.wor.SubInOpts;
+import utils.ReqPage;
+
+import java.util.List;
+
+public interface WorService {
+
+    /**
+     * 查列表
+     *
+     * @param page
+     * @return
+     */
+    List<TSubjectBank> list(ReqPage page);
+
+    /**
+     * 查选项
+     *
+     * @param subjectId
+     * @return
+     */
+    List<TSubjectOption> findOptsBySId(int subjectId);
+
+    /**
+     * 保存题库
+     *
+     * @param subInOpts
+     * @return
+     */
+    String savesOrOpts(List<SubInOpts> subInOpts);
+}

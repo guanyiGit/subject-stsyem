@@ -1,0 +1,136 @@
+package com.system.controller;
+
+
+import com.system.VO.ExamVO;
+import com.system.entity.TExaminations;
+import com.system.entity.TRecord;
+import com.system.service.exam.ExamService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import com.system.utils.R;
+
+import java.util.Map;
+
+
+@RestController
+@RequestMapping("/biz/activity")
+public class ExamController extends BaseController{
+
+    @Autowired
+    private ExamService examService;
+
+    /**
+     * 查看考试列表
+     * @param  pageNum
+     * @param  pageSize
+     * @param  type
+     * @param  status
+     * @param  searchKey
+     */
+    @RequestMapping("/findExamList")
+    public R findExamList(Integer pageNum,Integer pageSize,Integer type,Integer status,String searchKey){
+        try{
+            Map<String,Object>m=examService.findExamList(pageNum,pageSize,type,status,searchKey);
+            return R.ok(m);
+        }
+        catch (Exception e){
+            return  R.error();
+        }
+    }
+
+    /**
+     * 新增考试
+     */
+    @RequestMapping("/insertExam")
+    public R insertExam(TExaminations examinations){
+        try{
+            int a=examService.insert(examinations);
+            return R.ok(a);
+        }
+        catch (Exception e){
+            return  R.error();
+        }
+    }
+
+    /**
+     * 修改考试
+     */
+    @RequestMapping("/updateExam")
+    public R updateExam(TExaminations examinations){
+        try{
+            int a=examService.update(examinations);
+            return R.ok(a);
+        }
+        catch (Exception e){
+            return  R.error();
+        }
+    }
+
+    /**
+     * 删除考试
+     */
+    @RequestMapping("/deleteExam")
+    public R deleteExam(Integer id){
+        try{
+            int a=examService.delete(id);
+            return R.ok(a);
+        }
+        catch (Exception e){
+            return  R.error();
+        }
+    }
+    /**
+     * 查看考试
+     */
+    @RequestMapping("/detailExam")
+    public R detailExam(Integer id){
+        try{
+           ExamVO vo=examService.detail(id);
+            return R.ok(vo);
+        }
+        catch (Exception e){
+            return  R.error();
+        }
+    }
+
+
+
+
+
+
+
+    /**
+     * 新增考试记录
+     * @param record
+     * @return id:考试记录主键id
+     */
+    @RequestMapping("/insertExamRecord")
+    public R insertExamRecord(TRecord record){
+        try{
+            Integer i=examService.insertExamRecord(record);
+            return R.ok(i);
+        }
+        catch (Exception e){
+            return  R.error();
+        }
+    }
+
+
+
+    /**
+     * 更改考试状态
+     * @return
+     */
+    @RequestMapping("/updateStatus")
+    public R updateStatus(Integer id,Integer status){
+        try{
+            Integer i=examService.updateStatus(id,status);
+            return R.ok(i);
+        }
+        catch (Exception e){
+            return  R.error();
+        }
+    }
+
+
+}

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.RtDb" >
+
+    <resultMap id="SubScoreResultMap" type="com.system.pojo.rt.SubScore" autoMapping="true">
+        <id column="subjectId" property="subjectId"></id>
+        <collection ofType="com.system.pojo.rt.SubScoreOpts" property="subScoreOpts" autoMapping="true">
+            <id column="optionId" property="optionId"></id>
+        </collection>
+    </resultMap>
+
+    <!--    查考试列表-->
+    <select id="findRtList" resultType="com.system.pojo.rt.Rt">
+        SELECT
+            e.exam_id examId,
+            e.exam_name examName,
+            e.exam_type examType,
+            e.exam_time examTime,
+            tp.paper_total_score score,
+            ifNUll(count(r.record_id),0) passCount,
+            ifNUll(r1.total,0) total,
+            CONVERT(count(r.record_id) / r1.total,DECIMAL(15,5)) pass
+        FROM
+            t_examinations e
+        INNER JOIN t_test_paper tp ON tp.paper_id = e.paper_id
+        LEFT JOIN t_record r ON r.exam_id = e.exam_id AND r.is_pass = 0
+
+        LEFT JOIN (
+            SELECT ei.exam_id,COUNT(ri.record_id) total FROM  t_examinations ei
+            LEFT JOIN  t_record ri ON ri.exam_id = ei.exam_id
+            GROUP BY ei.exam_id
+        ) r1 ON r1.exam_id = e.exam_id
+
+        <where>
+            <if test="examType != null">
+                AND e.exam_type = #{examType}
+            </if>
+            <if test="qReqPage != null and qReqPage.keyWord != null and qReqPage.keyWord != ''">
+                AND e.exam_name LIKE CONCAT("%",#{qReqPage.keyWord},"%")
+            </if>
+        </where>
+        GROUP BY  e.exam_id
+        ORDER BY  e.create_time DESC
+        <if test="qReqPage != null">
+            LIMIT #{qReqPage.offset},#{qReqPage.limit}
+        </if>
+    </select>
+
+
+    <!--    查考试列表  count -->
+    <select id="findRtListCount" resultType="java.lang.Integer">
+        SELECT ifnull(SUM(ct_tb.ct),0) from  (
+            SELECT ifNUll(COUNT(1),0) AS  ct
+            FROM
+                t_examinations e
+            INNER JOIN t_test_paper tp ON tp.paper_id = e.paper_id
+            LEFT JOIN t_record r ON r.exam_id = e.exam_id AND r.is_pass = 0
+
+            LEFT JOIN (
+            SELECT ei.exam_id,COUNT(ri.record_id) total FROM  t_examinations ei
+            LEFT JOIN  t_record ri ON ri.exam_id = ei.exam_id
+            GROUP BY ei.exam_id
+            ) r1 ON r1.exam_id = e.exam_id
+
+            <where>
+                <if test="examType != null">
+                    AND e.exam_type = #{examType}
+                </if>
+                <if test="qReqPage != null and qReqPage.keyWord != null and qReqPage.keyWord != ''">
+                    AND e.exam_name LIKE CONCAT("%",#{qReqPage.keyWord},"%")
+                </if>
+            </where>
+            GROUP BY  e.exam_id
+        ) ct_tb
+    </select>
+
+
+    <!--    查成绩列表-->
+    <select id="findScoresByexId" resultType="com.system.pojo.rt.Score">
+        SELECT
+            es.exam_id  examId,  e.id exId, e.`name` exName, e.phone exPhone,  e.openId exWx,
+            r.seq, r.record_id recordId, r.score, r.is_pass isPass,
+            t.paper_total_score total
+        FROM
+            t_examinations es
+        INNER JOIN t_record r ON r.exam_id = es.exam_id
+        INNER JOIN t_examinee e ON r.examinee_id = e.id
+        LEFT JOIN t_test_paper t ON t.paper_id = es.paper_id
+        <where>
+            <if test="examId != null">
+                AND es.exam_id = #{examId}
+            </if>
+            <if test="isPass != null">
+                AND r.is_pass = #{isPass}
+            </if>
+            <if test="qReqPage != null and qReqPage.keyWord != null and qReqPage.keyWord != ''">
+                AND e.`name` LIKE CONCAT("%",#{qReqPage.keyWord},"%")
+            </if>
+        </where>
+        ORDER BY r.score DESC, e.id ASC ,r.create_time DESC
+        <if test="qReqPage != null">
+            LIMIT #{qReqPage.offset},#{qReqPage.limit}
+        </if>
+    </select>
+
+    <!--    查成绩列表 count-->
+    <select id="findScoresByexIdCount" resultType="int">
+        SELECT ifnull(SUM(ct_tb.ct),0) from  (
+            SELECT ifNUll(COUNT(1),0) AS  ct
+            FROM
+                t_examinations es
+            INNER JOIN t_record r ON r.exam_id = es.exam_id
+            INNER JOIN t_examinee e ON r.examinee_id = e.id
+            LEFT JOIN t_test_paper t ON t.paper_id = es.paper_id
+            <where>
+                <if test="examId != null">
+                    AND es.exam_id = #{examId}
+                </if>
+                <if test="isPass != null">
+                    AND r.is_pass = #{isPass}
+                </if>
+                <if test="qReqPage != null and qReqPage.keyWord != null and qReqPage.keyWord != ''">
+                    AND e.`name` LIKE CONCAT("%",#{qReqPage.keyWord},"%")
+                </if>
+            </where>
+            ORDER BY r.score DESC, e.id ASC ,r.create_time DESC
+        ) ct_tb
+    </select>
+
+    <!--    查看考试记录列表-->
+    <select id="findExamRecord" resultType="com.system.pojo.rt.ExamRecord">
+        SELECT
+            r.record_id recordId,r.seq,r.score,r.start_time startTime,r.end_time endTime, r.create_time creationTime,
+            TIMESTAMPDIFF(MINUTE, (DATE_FORMAT(r.start_time,'%Y-%m-%d %H:%i')), (DATE_FORMAT(r.end_time, '%Y-%m-%d %H:%i')) ) useTime
+        FROM
+            (t_record r,t_examinee e)
+        WHERE r.examinee_id = e.id
+        <if test="exId != null">
+           AND e.id = #{exId}
+        </if>
+        ORDER BY r.seq ASC
+        <if test="page != null">
+           LIMIT #{page.offset},#{page.limit}
+        </if>
+    </select>
+
+    <!--    查看考试记录列表 count-->
+    <select id="findExamRecordCount" resultType="int">
+        SELECT ifnull(count(1),0) from (
+            SELECT
+                r.record_id recordId,r.seq,r.score,r.start_time startTime,r.end_time endTime, r.create_time creationTime,
+                TIMESTAMPDIFF(MINUTE, (DATE_FORMAT(r.start_time,'%Y-%m-%d %H:%i')), (DATE_FORMAT(r.end_time, '%Y-%m-%d %H:%i')) ) useTime
+            FROM
+                (t_record r,t_examinee e)
+            WHERE r.examinee_id = e.id
+            <if test="exId != null">
+                AND e.id = #{exId}
+            </if>
+            ORDER BY r.seq ASC
+        ) tb_cut
+    </select>
+
+    <!--    查看考试结果明细-->
+    <select id="findExamRecordDateils" resultMap="SubScoreResultMap">
+        SELECT
+           srp.seq optSeq,
+           sb.subject_id subjectId, sb.subject_content content,
+           sp.option_id optionId, sp.option_value optVal, sp.is_true isTrue,sp.option_number optionSeq,
+           a.examinee_answer myOptVal, a.result
+        FROM
+           (t_record r,t_examinations es,t_test_paper tp,t_subject_ref_paper srp)
+        INNER JOIN t_subject_bank sb ON sb.subject_id = srp.subject_id
+        LEFT JOIN t_answer a ON a.subject_id = sb.subject_id AND a.record_id = r.record_id
+        LEFT JOIN t_subject_option sp ON sp.subject_id = sb.subject_id
+        WHERE r.exam_id = es.exam_id
+        AND es.paper_id = tp.paper_id
+        AND tp.paper_id = srp.paper_id
+        <if test='recordId != null'>
+            AND r.record_id = #{recordId}
+        </if>
+        <if test='result != null'>
+            AND a.result = #{result}
+        </if>
+        ORDER BY srp.seq
+        <if test='page != null'>
+            LIMIT #{page.offset},#{page.limit}
+        </if>
+    </select>
+
+    <!--    查看考试结果明细 count-->
+    <select id="findExamRecordDateilsCount" resultType="int">
+        SELECT ifnull(COUNT(1),0) FROM (
+            SELECT
+                srp.seq optSeq,
+                sb.subject_id subjectId, sb.subject_content content,
+                sp.option_id optionId, sp.option_value optVal, sp.is_true isTrue,
+                a.examinee_answer myOptVal, a.result
+            FROM
+                (t_record r,t_examinations es,t_test_paper tp,t_subject_ref_paper srp)
+            INNER JOIN t_subject_bank sb ON sb.subject_id = srp.subject_id
+            LEFT JOIN t_answer a ON a.subject_id = sb.subject_id AND a.record_id = r.record_id
+            LEFT JOIN t_subject_option sp ON sp.subject_id = sb.subject_id
+            WHERE r.exam_id = es.exam_id
+            AND es.paper_id = tp.paper_id
+            AND tp.paper_id = srp.paper_id
+            <if test='recordId != null'>
+                AND r.record_id = #{recordId}
+            </if>
+            <if test='result != null'>
+                AND a.result = #{result}
+            </if>
+            GROUP BY  subjectId
+        ) tb_cut
+    </select>
+
+
+
+</mapper>

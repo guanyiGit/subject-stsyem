@@ -1,0 +1,101 @@
+package com.system.pojo.rt;
+
+public class Rt {
+    /**
+     * 考试id
+     */
+    private Integer examId;
+    /**
+     * 考试名称
+     */
+    private String examName;
+    /**
+     * 考试分类 0.交通法考试 1民法考试 ....（待定）
+     */
+    private Integer examType;
+    /**
+     * 考试时长  单位(分钟)
+     */
+    private Integer examTime;
+    /**
+     * 总分
+     */
+    private Integer score;
+    /**
+     * 及格人数
+     */
+    private Integer passCount;
+    /**
+     * 考试总人数
+     */
+    private Integer total;
+
+    /**
+     * 及格率 小数
+     */
+    private Float pass;
+
+    public Integer getExamId() {
+        return examId;
+    }
+
+    public void setExamId(Integer examId) {
+        this.examId = examId;
+    }
+
+    public String getExamName() {
+        return examName;
+    }
+
+    public void setExamName(String examName) {
+        this.examName = examName;
+    }
+
+    public Integer getExamType() {
+        return examType;
+    }
+
+    public void setExamType(Integer examType) {
+        this.examType = examType;
+    }
+
+    public Integer getExamTime() {
+        return examTime;
+    }
+
+    public void setExamTime(Integer examTime) {
+        this.examTime = examTime;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public Integer getPassCount() {
+        return passCount;
+    }
+
+    public void setPassCount(Integer passCount) {
+        this.passCount = passCount;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
+
+    public Float getPass() {
+        return pass;
+    }
+
+    public void setPass(Float pass) {
+        this.pass = pass;
+    }
+}

@@ -1,0 +1,22 @@
+package com.system.mapper;
+
+import com.system.entity.TExaminations;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+public interface TExaminationsMapper {
+
+    int deleteByPrimaryKey(Integer examId);
+
+    int insert(TExaminations record);
+
+    int insertSelective(TExaminations record);
+
+
+    TExaminations selectByPrimaryKey(Integer examId);
+
+    int updateByPrimaryKeySelective(TExaminations record);
+
+    int updateByPrimaryKey(TExaminations record);
+}

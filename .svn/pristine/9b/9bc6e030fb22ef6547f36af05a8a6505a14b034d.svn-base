@@ -1,0 +1,17 @@
+package com.system.service.examinee;
+
+import com.system.entity.TExaminee;
+import utils.R;
+
+/**
+ * @author pengyu
+ * @Date 2019/6/20
+ * @Description
+ */
+public interface ExanineeService {
+
+    R insertExaminee(TExaminee examinee)throws Exception;
+
+    TExaminee findExamineeByOpenId(String openId)throws Exception;
+
+}

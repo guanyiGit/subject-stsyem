@@ -1,0 +1,21 @@
+package com.system.mapper;
+
+import com.system.entity.TRecord;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface TRecordMapper {
+
+    int deleteByPrimaryKey(Integer achieveId);
+
+    int insert(TRecord record);
+
+    int insertSelective(TRecord record);
+
+
+    TRecord selectByPrimaryKey(Integer achieveId);
+
+    int updateByPrimaryKeySelective(TRecord record);
+
+    int updateByPrimaryKey(TRecord record);
+}

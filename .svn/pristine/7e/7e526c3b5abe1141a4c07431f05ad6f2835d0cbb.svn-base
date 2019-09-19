@@ -1,0 +1,68 @@
+package com.system.controller.wor;
+
+import com.system.config.CorsConfig;
+import com.system.pojo.wor.SubInOpts;
+import com.system.service.wor.WorService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import utils.R;
+import utils.ReqPage;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/wor")
+public class WorController {
+
+    @Autowired
+    private WorService worService;
+
+    /**
+     * 查列表
+     *
+     * @param page
+     * @return
+     */
+    @GetMapping("/list")
+    public R list(ReqPage page) {
+        try {
+            return R.ok(worService.list(page));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 查选项
+     *
+     * @param subjectId
+     * @return
+     */
+    @GetMapping("/{subjectId}")
+    public R optsBySId(@PathVariable int subjectId) {
+        try {
+            return R.ok(worService.findOptsBySId(subjectId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error(e.getMessage());
+        }
+    }
+
+
+    /**
+     * 保存题库
+     *
+     * @param subInOpts
+     * @return
+     */
+    @PostMapping("/orOpts")
+    public R savesOrOpts(@RequestBody List<SubInOpts> subInOpts) {
+        try {
+            return R.ok(worService.savesOrOpts(subInOpts));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error(e.getMessage());
+        }
+    }
+}

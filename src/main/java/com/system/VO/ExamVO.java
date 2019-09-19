@@ -1,0 +1,47 @@
+package com.system.VO;
+
+import com.system.entity.TExaminations;
+
+public class ExamVO extends TExaminations {
+    private String paperName;
+
+    private Integer totalScore;
+
+
+    private String createBy;
+
+    public Integer getRecordCount() {
+        return recordCount;
+    }
+
+    public void setRecordCount(Integer recordCount) {
+        this.recordCount = recordCount;
+    }
+
+    private Integer recordCount;
+
+    public String getCreateBy() {
+
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public Integer getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(Integer totalScore) {
+        this.totalScore = totalScore;
+    }
+
+    public String getPaperName() {
+        return paperName;
+    }
+
+    public void setPaperName(String paperName) {
+        this.paperName = paperName;
+    }
+}

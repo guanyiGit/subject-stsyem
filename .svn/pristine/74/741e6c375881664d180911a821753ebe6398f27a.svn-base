@@ -1,0 +1,153 @@
+package com.system.mapper;
+
+import com.system.pojo.rt.ExamRecord;
+import com.system.pojo.rt.Rt;
+import com.system.pojo.rt.Score;
+import com.system.pojo.rt.SubScore;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultType;
+import org.apache.ibatis.annotations.Select;
+import utils.ReqPage;
+
+import java.util.List;
+@Mapper
+public interface RtDb {
+
+    @Select(value = {
+            "<script>",
+            "SELECT",
+            "   e.exam_id examId, e.exam_name examName, e.exam_type examType,e.exam_time examTime, tp.paper_total_score score, count(r.record_id) passCount, count(r1.record_id) total, count(r.record_id)/count(r1.record_id) pass",
+            "FROM",
+            "   t_examinations e",
+            "INNER JOIN t_test_paper tp ON tp.paper_id = e.paper_id",
+            "LEFT JOIN t_record r ON r.exam_id = e.exam_id",
+            "LEFT JOIN t_record r1 ON r1.exam_id = e.exam_id",
+            "WHERE r.is_pass =0",
+            "<if test='examType != null'>",
+            "   AND e.exam_type = #{examType}",
+            "</if>",
+            "<if test='qReqPage != null and qReqPage.keyWord != null and qReqPage.keyWord != \"\"'>",
+            "   AND e.exam_name LIKE CONCAT('%',#{qReqPage.keyWord},'%')",
+            "</if>",
+            "GROUP BY e.exam_id",
+            "ORDER BY e.create_time DESC",
+            "<if test='qReqPage != null'>",
+            "   LIMIT #{qReqPage.offset},#{qReqPage.limit}",
+            "</if>",
+            "</script>"
+    })
+    @ResultType(value = Rt.class)
+    /**
+     * 查考试列表
+     *
+     * @param qReqPage 分页
+     * @param examType 考试分类 --> 0.交通法考试 1民法考试 ....（待定）
+     * @return
+     */
+    List<Rt> findRtList(@Param("qReqPage") ReqPage.QReqPage qReqPage, @Param("examType") Integer examType);
+
+
+    @Select(value = {
+            "<script>",
+            "SELECT",
+            "e.id exId,e.`name` exName,e.phone exPhone,e.openId exWx,",
+            "r.seq,r.record_id recordId,r.score,",
+            "t.paper_total_score total,",
+            "r.is_pass isPass",
+            "FROM",
+            "t_record r",
+            "INNER JOIN t_examinee e ON r.examinee_id = e.id",
+            "LEFT JOIN t_examinations es ON es.exam_id = r.exam_id",
+            "LEFT JOIN t_test_paper t ON t.paper_id = es.paper_id",
+            "<where>",
+            "<if test='examId != null'>",
+            "   AND es.exam_id = #{examId}",
+            "</if>",
+            "<if test='is_pass != null'>",
+            "   AND r.is_pass = #{isPass}",
+            "</if>",
+            "<if test='qReqPage != null and qReqPage.keyWord != null and qReqPage.keyWord != \"\"'>",
+            "   AND e.`name` LIKE CONCAT('%',#{qReqPage.keyWord},'%')",
+            "</if>",
+            "</where>",
+            "ORDER BY e.id ASC ,r.create_time DESC",
+            "<if test='qReqPage != null'>",
+            "   LIMIT #{qReqPage.offset},#{qReqPage.limit}",
+            "</if>",
+            "</script>"
+    })
+    @ResultType(value = Score.class)
+    /**
+     * 查成绩列表
+     *
+     * @param qReqPage 分页
+     * @param examId     所属考试id
+     * @param isPass   是否及格 0.及格 1.未及格
+     * @return
+     */
+    List<Score> findScoresByexId(@Param("qReqPage") ReqPage.QReqPage qReqPage, @Param("examId") Integer examId, @Param("isPass") Integer isPass);
+
+    @Select(value = {
+            "<script>",
+            "SELECT",
+            "   r.record_id recordId,r.seq,r.score,r.start_time startTime,r.end_time endTime,r.end_time-r.start_time useTime",
+            "FROM (t_record r,t_examinee e)",
+            "WHERE r.examinee_id = e.id",
+            "<if test='exId != null'>",
+            "   AND e.id = #{exId}",
+            "</if>",
+            "ORDER BY r.seq ASC",
+            "<if test='page != null'>",
+            "   LIMIT #{page.offset},#{page.limit}",
+            "</if>",
+            "</script>"
+    })
+    @ResultType(value = ExamRecord.class)
+    /**
+     * 查看考试记录列表
+     *
+     * @param page   分页
+     * @param exId 考生id
+     * @return
+     */
+    List<ExamRecord> findExamRecord(@Param("page") ReqPage page, @Param("exId") Integer exId);
+
+
+    @Select(value = {
+            "<script>",
+            "SELECT",
+            "   srp.seq optSeq,",
+            "   sb.subject_id subjectId, sb.subject_content content,",
+            "   sp.option_value optVal, sp.is_true isTrue,",
+            "   a.examinee_answer myOptVal, a.result",
+            "FROM",
+            "   (t_record r,t_examinations es,t_test_paper tp,t_subject_ref_paper srp)",
+            "INNER JOIN t_subject_bank sb ON sb.subject_id = srp.subject_id",
+            "LEFT JOIN t_subject_option sp ON sp.subject_id = sb.subject_id",
+            "LEFT JOIN t_answer a ON a.subject_id = sb.subject_id",
+            "WHERE r.exam_id = es.exam_id",
+            "AND es.paper_id = tp.paper_id",
+            "AND tp.paper_id = srp.paper_id",
+            "<if test='recordId != null'>",
+            "   AND r.record_id = #{recordId}",
+            "</if>",
+            "<if test='result != null'>",
+            "   AND a.result = #{result}",
+            "</if>",
+            "<if test='page != null'>",
+            "   LIMIT #{page.offset},#{page.limit}",
+            "</if>",
+            "</script>"
+    })
+    @ResultType(value = SubScore.class)
+    /**
+     * 查看考试结果明细
+     *
+     * @param page     分页
+     * @param recordId 考试记录id
+     * @param result   考试结果 0.正确 1.错误
+     * @return
+     */
+    List<SubScore> findExamRecordDateil(@Param("page") ReqPage page, @Param("recordId") Integer recordId, @Param("result") Integer result);
+}

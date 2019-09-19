@@ -1,0 +1,120 @@
+package com.system.service.exam.impl;
+
+import com.system.VO.ExamVO;
+import com.system.entity.TExaminations;
+import com.system.entity.TExaminee;
+import com.system.entity.TRecord;
+import com.system.mapper.TExaminationsMapper;
+import com.system.mapper.TExamineeMapper;
+import com.system.mapper.TRecordMapper;
+import com.system.service.exam.ExamService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class ExamServiceImpl implements ExamService {
+    @Autowired
+    private TExaminationsMapper examMapper;
+
+    @Autowired
+    private TExamineeMapper examineeMapper;
+
+    @Autowired
+    private TRecordMapper recordMapper;
+
+    /**
+     * 查看考试列表
+     *
+     * @param pageNum
+     * @param pageSize
+     * @param type
+     * @param status
+     * @param searchKey
+     */
+    @Override
+    public Map<String, Object> findExamList(Integer pageNum, Integer pageSize, Integer type, Integer status, String searchKey) {
+        Map<String, Object> map = new HashMap<>();
+        Integer index = (pageNum - 1) * pageSize;
+        Date date = new Date();
+        //列表
+        List<TExaminations> list = examMapper.findExamList(index, pageSize, type, status, searchKey);
+        if (list != null && list.size() > 0) {
+            for (TExaminations t : list) {
+                //当前日期大于生效时间
+                if (date.getTime() > t.getEffectDate().getTime()) {
+                    t.setExamStatus(1);
+                    //失效时间不为空
+                    if (t.getFailureDate() != null) {
+                        //当前日期大失效时间
+                        if (date.getTime() > t.getFailureDate().getTime()) {
+                            t.setExamStatus(2);
+                        }
+
+                    }
+                }
+            }
+        }
+
+        //总数
+        Integer total = examMapper.countExam(type, status, searchKey);
+        map.put("list", list);
+        map.put("total", total);
+        return map;
+    }
+
+    //新增考试
+    @Override
+    public int insert(TExaminations examinations) {
+        examinations.setCreateTime(new Date());
+        int i = examMapper.insertSelective(examinations);
+        return i;
+    }
+
+    /**
+     * 修改考试
+     */
+    @Override
+    public int update(TExaminations examinations) {
+        int i = examMapper.updateByPrimaryKeySelective(examinations);
+        return i;
+    }
+
+    /**
+     * 删除考试
+     */
+    @Override
+    public int delete(Integer id) {
+        int i = examMapper.deleteByPrimaryKey(id);
+        return i;
+    }
+
+    /**
+     * 查看考试
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public ExamVO detail(Integer id) {
+        return examMapper.detail(id);
+    }
+
+
+    /**
+     * 新增考试记录
+     *
+     * @param record
+     * @return id:考试记录主键id
+     */
+    @Override
+    public Integer insertExamRecord(TRecord record) {
+        recordMapper.insertSelective(record);
+        return record.getRecordId();
+    }
+
+}

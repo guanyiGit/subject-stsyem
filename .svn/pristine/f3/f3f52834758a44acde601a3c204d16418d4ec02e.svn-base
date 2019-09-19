@@ -1,0 +1,56 @@
+package com.system.service.examination;
+
+import com.system.entity.TExaminations;
+import com.system.pojo.examination.CheckExamIsCanJoin;
+import com.system.pojo.examination.ExaminationDetail;
+import com.system.pojo.examination.ExaminationVo;
+import com.system.utils.R;
+import com.system.utils.ReqPage;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
+
+/**
+ * @author pengyu
+ * @Date 2019/6/20
+ * @Description
+ */
+public interface ExaminationService {
+
+    /**
+     * 考试查询(默认查询发布中，和已停止的考试)
+     *
+     * @param reqPage
+     * @return
+     * @throws Exception
+     */
+    List<ExaminationVo> getExaminations(ReqPage reqPage, Integer examineeId) throws Exception;
+
+    /**
+     * 考试查询
+     * @param examId
+     * @return
+     * @throws Exception
+     */
+    TExaminations getExaminations(Integer examId) throws Exception;
+
+
+    /**
+     * 查看考生考试详情
+     * @param examineeId
+     * @param examId
+     * @param seq
+     * @return
+     * @throws Exception
+     */
+    ExaminationDetail getExamResultMenu(Integer examineeId, Integer examId, Integer seq)throws Exception;
+
+    /**
+     * 检查当前考试是否可已参加
+     * @param examineeId
+     * @param examId
+     * @return
+     * @throws Exception
+     */
+    CheckExamIsCanJoin checkExamIsCanJoin(Integer examineeId, Integer examId)throws Exception;
+}

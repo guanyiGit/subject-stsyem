@@ -1,0 +1,11 @@
+package com.system.controller;
+
+public class WorController {
+
+//    private WorServer worServer;
+//
+//    public String list(){
+//        worServer.list();
+//
+//    }
+}

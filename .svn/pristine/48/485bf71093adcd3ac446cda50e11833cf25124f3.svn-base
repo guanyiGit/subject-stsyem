@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.TTestPaperMapper" >
+  <resultMap id="BaseResultMap" type="com.system.entity.TTestPaper" >
+    <id column="paper_id" property="paperId" jdbcType="INTEGER" />
+    <result column="paper_type" property="paperType" jdbcType="INTEGER" />
+    <result column="paper_mode" property="paperMode" jdbcType="INTEGER" />
+    <result column="paper_name" property="paperName" jdbcType="VARCHAR" />
+    <result column="paper_number" property="paperNumber" jdbcType="INTEGER" />
+    <result column="paper_total_score" property="paperTotalScore" jdbcType="INTEGER" />
+    <result column="paper_status" property="paperStatus" jdbcType="INTEGER" />
+    <result column="paper_creater" property="paperCreater" jdbcType="INTEGER" />
+    <result column="paper_create_time" property="paperCreateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    paper_id, paper_type, paper_mode, paper_name, paper_number, paper_total_score, paper_status, 
+    paper_creater, paper_create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from "t_test paper"
+    where paper_id = #{paperId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from "t_test paper"
+    where paper_id = #{paperId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.system.entity.TTestPaper" >
+    insert into "t_test paper" (paper_id, paper_type, paper_mode, 
+      paper_name, paper_number, paper_total_score, 
+      paper_status, paper_creater, paper_create_time
+      )
+    values (#{paperId,jdbcType=INTEGER}, #{paperType,jdbcType=INTEGER}, #{paperMode,jdbcType=INTEGER}, 
+      #{paperName,jdbcType=VARCHAR}, #{paperNumber,jdbcType=INTEGER}, #{paperTotalScore,jdbcType=INTEGER}, 
+      #{paperStatus,jdbcType=INTEGER}, #{paperCreater,jdbcType=INTEGER}, #{paperCreateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.entity.TTestPaper" >
+    insert into "t_test paper"
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="paperId != null" >
+        paper_id,
+      </if>
+      <if test="paperType != null" >
+        paper_type,
+      </if>
+      <if test="paperMode != null" >
+        paper_mode,
+      </if>
+      <if test="paperName != null" >
+        paper_name,
+      </if>
+      <if test="paperNumber != null" >
+        paper_number,
+      </if>
+      <if test="paperTotalScore != null" >
+        paper_total_score,
+      </if>
+      <if test="paperStatus != null" >
+        paper_status,
+      </if>
+      <if test="paperCreater != null" >
+        paper_creater,
+      </if>
+      <if test="paperCreateTime != null" >
+        paper_create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="paperId != null" >
+        #{paperId,jdbcType=INTEGER},
+      </if>
+      <if test="paperType != null" >
+        #{paperType,jdbcType=INTEGER},
+      </if>
+      <if test="paperMode != null" >
+        #{paperMode,jdbcType=INTEGER},
+      </if>
+      <if test="paperName != null" >
+        #{paperName,jdbcType=VARCHAR},
+      </if>
+      <if test="paperNumber != null" >
+        #{paperNumber,jdbcType=INTEGER},
+      </if>
+      <if test="paperTotalScore != null" >
+        #{paperTotalScore,jdbcType=INTEGER},
+      </if>
+      <if test="paperStatus != null" >
+        #{paperStatus,jdbcType=INTEGER},
+      </if>
+      <if test="paperCreater != null" >
+        #{paperCreater,jdbcType=INTEGER},
+      </if>
+      <if test="paperCreateTime != null" >
+        #{paperCreateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.system.entity.TTestPaper" >
+    update "t_test paper"
+    <set >
+      <if test="paperType != null" >
+        paper_type = #{paperType,jdbcType=INTEGER},
+      </if>
+      <if test="paperMode != null" >
+        paper_mode = #{paperMode,jdbcType=INTEGER},
+      </if>
+      <if test="paperName != null" >
+        paper_name = #{paperName,jdbcType=VARCHAR},
+      </if>
+      <if test="paperNumber != null" >
+        paper_number = #{paperNumber,jdbcType=INTEGER},
+      </if>
+      <if test="paperTotalScore != null" >
+        paper_total_score = #{paperTotalScore,jdbcType=INTEGER},
+      </if>
+      <if test="paperStatus != null" >
+        paper_status = #{paperStatus,jdbcType=INTEGER},
+      </if>
+      <if test="paperCreater != null" >
+        paper_creater = #{paperCreater,jdbcType=INTEGER},
+      </if>
+      <if test="paperCreateTime != null" >
+        paper_create_time = #{paperCreateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where paper_id = #{paperId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.system.entity.TTestPaper" >
+    update "t_test paper"
+    set paper_type = #{paperType,jdbcType=INTEGER},
+      paper_mode = #{paperMode,jdbcType=INTEGER},
+      paper_name = #{paperName,jdbcType=VARCHAR},
+      paper_number = #{paperNumber,jdbcType=INTEGER},
+      paper_total_score = #{paperTotalScore,jdbcType=INTEGER},
+      paper_status = #{paperStatus,jdbcType=INTEGER},
+      paper_creater = #{paperCreater,jdbcType=INTEGER},
+      paper_create_time = #{paperCreateTime,jdbcType=TIMESTAMP}
+    where paper_id = #{paperId,jdbcType=INTEGER}
+  </update>
+</mapper>

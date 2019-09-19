@@ -1,0 +1,73 @@
+package com.system.service.exam.impl;
+
+import com.system.VO.ExamVO;
+import com.system.entity.TExaminations;
+import com.system.mapper.TExaminationsMapper;
+import com.system.service.exam.ExamService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class ExamServiceImpl implements ExamService {
+    @Autowired
+    private TExaminationsMapper examMapper;
+    /**
+     * 查看考试列表
+     * @param  pageNum
+     * @param  pageSize
+     * @param  type
+     * @param  status
+     * @param  searchKey
+     */
+    @Override
+    public Map<String, Object> findExamList(Integer pageNum,Integer pageSize,Integer type,Integer status,String searchKey) {
+        Map<String,Object>map=new HashMap<>();
+        Integer index=(pageNum-1)*pageSize;
+        //列表
+        List<TExaminations>list= examMapper.findExamList(index,pageSize,type,status,searchKey);
+        //总数
+        Integer total=examMapper.countExam(type,status,searchKey);
+        map.put("list",list);
+        map.put("total",total);
+        return map;
+    }
+
+    //新增考试
+    @Override
+    public int insert(TExaminations examinations) {
+        int i = examMapper.insertSelective(examinations);
+        return i;
+    }
+
+    /**
+     * 修改考试
+     */
+    @Override
+    public int update(TExaminations examinations) {
+        int i = examMapper.updateByPrimaryKeySelective(examinations);
+        return i;
+    }
+
+    /**
+     * 删除考试
+     */
+    @Override
+    public int delete(Integer id) {
+        int i = examMapper.deleteByPrimaryKey(id);
+        return i;
+    }
+
+    /**
+     * 查看考试
+     * @param id
+     * @return
+     */
+    @Override
+    public ExamVO detail(Integer id) {
+        return examMapper.detail(id);
+    }
+}

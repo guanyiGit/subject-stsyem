@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.TSubjectBankMapper" >
+  <resultMap id="BaseResultMap" type="com.system.entity.TSubjectBank" >
+    <id column="subject_id" property="subjectId" jdbcType="INTEGER" />
+    <result column="sunject_type" property="sunjectType" jdbcType="INTEGER" />
+    <result column="subject_mode" property="subjectMode" jdbcType="INTEGER" />
+    <result column="subject_content" property="subjectContent" jdbcType="VARCHAR" />
+    <result column="subject_url" property="subjectUrl" jdbcType="VARCHAR" />
+    <result column="subject_analysis" property="subjectAnalysis" jdbcType="VARCHAR" />
+    <result column="subject_difficulty" property="subjectDifficulty" jdbcType="INTEGER" />
+    <result column="subject_status" property="subjectStatus" jdbcType="INTEGER" />
+    <result column="subject_creater" property="subjectCreater" jdbcType="INTEGER" />
+    <result column="subject_createtime" property="subjectCreatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    subject_id, sunject_type, subject_mode, subject_content, subject_url, subject_analysis, 
+    subject_difficulty, subject_status, subject_creater, subject_createtime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_subject_bank
+    where subject_id = #{subjectId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_subject_bank
+    where subject_id = #{subjectId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.system.entity.TSubjectBank" >
+    insert into t_subject_bank (subject_id, sunject_type, subject_mode, 
+      subject_content, subject_url, subject_analysis, 
+      subject_difficulty, subject_status, subject_creater, 
+      subject_createtime)
+    values (#{subjectId,jdbcType=INTEGER}, #{sunjectType,jdbcType=INTEGER}, #{subjectMode,jdbcType=INTEGER}, 
+      #{subjectContent,jdbcType=VARCHAR}, #{subjectUrl,jdbcType=VARCHAR}, #{subjectAnalysis,jdbcType=VARCHAR}, 
+      #{subjectDifficulty,jdbcType=INTEGER}, #{subjectStatus,jdbcType=INTEGER}, #{subjectCreater,jdbcType=INTEGER}, 
+      #{subjectCreatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.entity.TSubjectBank" >
+    insert into t_subject_bank
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="subjectId != null" >
+        subject_id,
+      </if>
+      <if test="sunjectType != null" >
+        sunject_type,
+      </if>
+      <if test="subjectMode != null" >
+        subject_mode,
+      </if>
+      <if test="subjectContent != null" >
+        subject_content,
+      </if>
+      <if test="subjectUrl != null" >
+        subject_url,
+      </if>
+      <if test="subjectAnalysis != null" >
+        subject_analysis,
+      </if>
+      <if test="subjectDifficulty != null" >
+        subject_difficulty,
+      </if>
+      <if test="subjectStatus != null" >
+        subject_status,
+      </if>
+      <if test="subjectCreater != null" >
+        subject_creater,
+      </if>
+      <if test="subjectCreatetime != null" >
+        subject_createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="subjectId != null" >
+        #{subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="sunjectType != null" >
+        #{sunjectType,jdbcType=INTEGER},
+      </if>
+      <if test="subjectMode != null" >
+        #{subjectMode,jdbcType=INTEGER},
+      </if>
+      <if test="subjectContent != null" >
+        #{subjectContent,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectUrl != null" >
+        #{subjectUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectAnalysis != null" >
+        #{subjectAnalysis,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectDifficulty != null" >
+        #{subjectDifficulty,jdbcType=INTEGER},
+      </if>
+      <if test="subjectStatus != null" >
+        #{subjectStatus,jdbcType=INTEGER},
+      </if>
+      <if test="subjectCreater != null" >
+        #{subjectCreater,jdbcType=INTEGER},
+      </if>
+      <if test="subjectCreatetime != null" >
+        #{subjectCreatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.system.entity.TSubjectBank" >
+    update t_subject_bank
+    <set >
+      <if test="sunjectType != null" >
+        sunject_type = #{sunjectType,jdbcType=INTEGER},
+      </if>
+      <if test="subjectMode != null" >
+        subject_mode = #{subjectMode,jdbcType=INTEGER},
+      </if>
+      <if test="subjectContent != null" >
+        subject_content = #{subjectContent,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectUrl != null" >
+        subject_url = #{subjectUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectAnalysis != null" >
+        subject_analysis = #{subjectAnalysis,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectDifficulty != null" >
+        subject_difficulty = #{subjectDifficulty,jdbcType=INTEGER},
+      </if>
+      <if test="subjectStatus != null" >
+        subject_status = #{subjectStatus,jdbcType=INTEGER},
+      </if>
+      <if test="subjectCreater != null" >
+        subject_creater = #{subjectCreater,jdbcType=INTEGER},
+      </if>
+      <if test="subjectCreatetime != null" >
+        subject_createtime = #{subjectCreatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where subject_id = #{subjectId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.system.entity.TSubjectBank" >
+    update t_subject_bank
+    set sunject_type = #{sunjectType,jdbcType=INTEGER},
+      subject_mode = #{subjectMode,jdbcType=INTEGER},
+      subject_content = #{subjectContent,jdbcType=VARCHAR},
+      subject_url = #{subjectUrl,jdbcType=VARCHAR},
+      subject_analysis = #{subjectAnalysis,jdbcType=VARCHAR},
+      subject_difficulty = #{subjectDifficulty,jdbcType=INTEGER},
+      subject_status = #{subjectStatus,jdbcType=INTEGER},
+      subject_creater = #{subjectCreater,jdbcType=INTEGER},
+      subject_createtime = #{subjectCreatetime,jdbcType=TIMESTAMP}
+    where subject_id = #{subjectId,jdbcType=INTEGER}
+  </update>
+
+  <!--  查列表-->
+  <select id="list" resultType="com.system.pojo.wor.SubBankInUser">
+        SELECT
+            s.subject_id, s.sunject_type, s.subject_mode, s.subject_content, s.subject_analysis, s.subject_creater, s.subject_createtime, s.subject_status,u.`name` uname,u.user_id uId
+        FROM
+            t_subject_bank s
+        LEFT JOIN t_user u ON u.user_id = s.subject_creater
+        <where>
+          <if test="keyWord != null and keyWord != ''">
+            AND s.subject_content LIKE '%'#{keyWord}'%'
+          </if>
+          <if test="subjectMode != null">
+            AND s.subject_mode = #{subjectMode}
+          </if>
+          <if test="subjectDifficulty != null">
+            AND s.subject_difficulty = #{subjectDifficulty}
+          </if>
+        </where>
+        LIMIT #{offset}, #{limit}
+  </select>
+
+  <!--  查列表 count-->
+  <select id="listCount" resultType="java.lang.Integer">
+        SELECT
+            COUNT(1)
+        FROM
+            t_subject_bank s
+        <where>
+          <if test="keyWord != null and keyWord != ''">
+            AND s.subject_content LIKE '%'#{keyWord}'%'
+          </if>
+          <if test="subjectMode != null">
+            AND s.subject_mode = #{subjectMode}
+          </if>
+          <if test="subjectDifficulty != null">
+            AND s.subject_difficulty = #{subjectDifficulty}
+          </if>
+        </where>
+  </select>
+
+
+  <!--  查试题option-->
+  <select id="findOptsBySId" resultType="com.system.entity.TSubjectOption">
+        SELECT
+            so.option_id,so.subject_id,so.option_value,so.is_true,so.create_time
+        FROM
+            t_subject_option so
+        <if test="subjectId != null">
+            WHERE so.subject_id = #{subjectId}
+        </if>
+  </select>
+
+    <!--  试题保存-->
+    <insert id="saveSubs" >
+       INSERT INTO `t_subject_bank`
+            ( `sunject_type`, `subject_mode`, `subject_content`, `subject_url`, `subject_analysis`, `subject_difficulty`, `subject_status`, `subject_creater`, `subject_createtime`)
+       VALUES
+       <foreach collection="subs" item="item" separator="),(" open="(" close=")">
+            #{item.sunject_type}, #{item.subject_mode}, #{item.subject_content}, #{item.subject_url}, #{item.subject_analysis}, #{item.subject_difficulty}, #{item.subject_status}, #{item.subject_creater}, #{item.subject_createtime}
+       </foreach>
+    </insert>
+
+    <!--  试题选项保存-->
+    <insert id="saveOpts" >
+        INSERT INTO
+            `t_subject_option` (`subject_id`, `option_number`, `option_value`, `is_true`, `create_time`)
+        VALUES
+        <foreach collection="opts" item="item" separator="),(" open="(" close=")">
+            #{item.subject_id}, #{item.option_number}, #{item.option_value}, #{item.is_true}, #{item.create_time}
+        </foreach>
+    </insert>
+
+</mapper>

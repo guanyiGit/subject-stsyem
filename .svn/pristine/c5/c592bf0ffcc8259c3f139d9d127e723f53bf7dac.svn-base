@@ -1,0 +1,119 @@
+package com.system.service.record.impl;
+
+import com.system.entity.TAnswer;
+import com.system.entity.TExaminations;
+import com.system.entity.TRecord;
+import com.system.mapper.TExaminationsMapper;
+import com.system.mapper.TRecordMapper;
+import com.system.pojo.record.RecordVo;
+import com.system.pojo.subject.SubjectVo;
+import com.system.pojo.testPaper.TestPaperVo;
+import com.system.service.answer.AnswerService;
+import com.system.service.record.RecordService;
+import com.system.service.testPaperLib.TestPaperService;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
+
+/**
+ * @author pengyu
+ * @Date 2019/6/21
+ * @Description
+ */
+@Service
+public class RecordServiceImpl implements RecordService {
+
+    @Autowired
+    private TRecordMapper recordMapper;
+
+    @Autowired
+    private TestPaperService testPaperService;
+
+    @Autowired
+    private TExaminationsMapper examinationsMapper;
+
+    @Autowired
+    private AnswerService answerService;
+
+    @Override
+    public TRecord recordAdd(TRecord record) throws Exception {
+        record.setCreateTime(new Date());
+        record.setSeq(1);
+
+        Integer recordCount = this.getRecordCount(record.getExamineeId(), record.getExamId());
+        if (recordCount != null && recordCount != 0){
+            record.setSeq(recordCount+1);
+        }
+        recordMapper.insertSelective(record);
+        return record;
+    }
+
+    @Override
+    public List<TRecord> findRecords(Integer examineeId, Integer examId) throws Exception{
+        List<TRecord> records = recordMapper.findByExamineeIdAndExamId(examineeId, examId);
+        return records;
+    }
+
+    @Override
+    public TRecord findRecords(Integer recordId) throws Exception {
+        TRecord record = recordMapper.selectByPrimaryKey(recordId);
+        return record;
+    }
+
+    @Override
+    public Integer getRecordCount(Integer examineeId, Integer examId) {
+        Integer recordCount = recordMapper.getRecordCount(examineeId, examId);
+        return recordCount;
+    }
+
+    @Override
+    public TRecord recordVoAdd(RecordVo recordVo) throws Exception{
+        TRecord record = new TRecord();
+        BeanUtils.copyProperties(recordVo,record);
+        //通过考试id查出当前试卷及题目对应分数
+        TExaminations examinations = examinationsMapper.selectByPrimaryKey(recordVo.getExamId());
+        TestPaperVo testPaperDetail = testPaperService.getTestPaperDetail(examinations.getPaperId());
+
+        List<SubjectVo> subjectVos = testPaperDetail.getSubjectVos();
+        List<TAnswer> activeSubjects = recordVo.getActiveSubject();
+        //如果是问卷调差，不做分数统计
+        if (examinations.getExamType() != 0){
+            Integer score = 0;
+            for (TAnswer answer:activeSubjects) {
+                for (SubjectVo subject :subjectVos){
+                    //如果传入的题目id和数字中相同且答案是正确的，分数相加
+                    if (answer.getSubjectId().equals(subject.getSubjectId())){
+                        if (answer.getResult() == 0){
+                            score += subject.getScore();
+                        }
+                    }
+                }
+            }
+            record.setScore(score);
+            //如果得分大于等于及格分数
+            if (score >= examinations.getPassScore() ){
+                record.setIsPass(0);
+            }else {
+                record.setIsPass(1);
+            }
+        }
+        TRecord record1 = this.recordAdd(record);
+        //获取到成绩记录id
+        activeSubjects.stream().forEach(item -> {
+            item.setRecordId(record1.getRecordId());
+            item.setCreateTime(new Date());
+        });
+        answerService.answerAdd(activeSubjects);
+        return record1;
+    }
+
+
+    @Override
+    public RecordVo getRecordVo(Integer examineeId, Integer examId) throws Exception {
+        RecordVo recordVo = recordMapper.getRecordVo(examineeId, examId);
+        return recordVo;
+    }
+}

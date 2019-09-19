@@ -1,0 +1,65 @@
+package com.system.mapper;
+
+import com.system.entity.TSubjectBank;
+import com.system.entity.TSubjectOption;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+public interface TSubjectBankMapper {
+
+    int deleteByPrimaryKey(Integer subjectId);
+
+    int insert(TSubjectBank record);
+
+    int insertSelective(TSubjectBank record);
+
+    TSubjectBank selectByPrimaryKey(Integer subjectId);
+
+    int updateByPrimaryKeySelective(TSubjectBank record);
+
+    int updateByPrimaryKey(TSubjectBank record);
+
+    /**
+     * 查列表
+     *
+     * @param offset
+     * @param limit
+     * @return
+     */
+    List<TSubjectBank> list(@Param("offset") int offset, @Param("limit") int limit);
+
+    /**
+     * 查列表 count
+     *
+     * @param offset
+     * @param limit
+     * @return
+     */
+    int listCount(@Param("offset") int offset, @Param("limit") int limit);
+
+
+    /**
+     * 试题option
+     *
+     * @param subjectId
+     * @return
+     */
+    List<TSubjectOption> findOptsBySId(@Param("subjectId") int subjectId);
+
+    /**
+     * 试题保存
+     *
+     * @param subs
+     * @return
+     */
+    int saveSubs(@Param("subs")List<TSubjectBank> subs);
+
+    /**
+     * 试题选项保存
+     *
+     * @param opts
+     * @return
+     */
+    int saveOpts(@Param("opts")List<TSubjectOption> opts);
+}

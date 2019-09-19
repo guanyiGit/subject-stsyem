@@ -1,0 +1,92 @@
+package com.system.service.wor;
+
+import com.github.pagehelper.PageInfo;
+import com.system.entity.TSubjectOption;
+import com.system.exception.RspException;
+import com.system.mapper.TSubjectBankMapper;
+import com.system.pojo.wor.SubBankInUser;
+import com.system.pojo.wor.SubInOpts;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.system.utils.ReqPage;
+
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class WorServiceImpl implements WorService {
+
+    @Autowired
+    private TSubjectBankMapper tSubjectBankMapper;
+
+    @Override
+    public PageInfo<SubBankInUser> list(ReqPage.QReqPage page, Integer subjectMode, Integer subjectDifficulty) {
+        PageInfo<SubBankInUser> pageInfo = new PageInfo<>(tSubjectBankMapper.list(page.getOffset(), page.getLimit(), page.getKeyWord(), subjectMode, subjectDifficulty));
+        pageInfo.setPageNum(page.getPageNum());
+        pageInfo.setPageSize(page.getLimit());
+        pageInfo.setTotal(tSubjectBankMapper.listCount(page.getOffset(), page.getLimit(), page.getKeyWord(), subjectMode, subjectDifficulty));
+        return pageInfo;
+    }
+
+    @Override
+    public List<TSubjectOption> findOptsBySId(int subjectId) {
+        return tSubjectBankMapper.findOptsBySId(subjectId);
+    }
+
+    @Override
+    @Transactional
+    public String savesOrOpts(List<SubInOpts> subInOpts) {
+        if (subInOpts == null || subInOpts.size() == 0) {
+            new RspException("参数错误！");
+        }
+        Date timestamp = new Date();
+        subInOpts.stream()
+                .forEach(x -> {
+                    x.setSubjectCreatetime(timestamp);
+                    x.setSubjectStatus(0);
+                });
+
+        if (tSubjectBankMapper.saveSubs(subInOpts) != subInOpts.size())
+            throw new RspException("试题保存失败！");
+
+        List<TSubjectOption> opts = subInOpts.stream()
+                .map(x -> {
+                    List<TSubjectOption> children = x.gettSubjectOptions();
+                    if (children != null)
+                        children.stream().forEach(c -> {
+                            c.setSubjectId(x.getSubjectId());
+                        });
+                    return children;
+                })
+                .flatMap(x -> x.stream())
+                .map(x -> {
+                    x.setCreateTime(timestamp);
+                    return x;
+                })
+                .collect(Collectors.toList());
+
+
+        if (tSubjectBankMapper.saveOpts(opts) != opts.size())
+            throw new RspException("试题选项保存失败！");
+
+        return null;
+    }
+
+    @Transactional
+    @Override
+    public boolean batchDelSubsAndOptsBySubIds(int[] subjectIds, boolean isdelOpts) {
+        if (subjectIds == null || subjectIds.length == 0) {
+            throw new RspException("参数错误！");
+        }
+        if (subjectIds.length != tSubjectBankMapper.batchDelSubsByIds(subjectIds)) {
+            throw new RspException("删除试题失败！");
+        }
+        if (isdelOpts && tSubjectBankMapper.batchDelOptsBySubIds(subjectIds) == 0) {
+            throw new RspException("删除试题选项失败！");
+        }
+        return true;
+    }
+
+}

@@ -1,0 +1,55 @@
+package com.system.entity;
+
+import java.util.Date;
+
+public class TSubjectRefPaper {
+    private Integer id;
+
+    private Integer subjectId;
+
+    private Integer paperId;
+
+    private Integer score;
+
+    private Date createTime;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(Integer subjectId) {
+        this.subjectId = subjectId;
+    }
+
+    public Integer getPaperId() {
+        return paperId;
+    }
+
+    public void setPaperId(Integer paperId) {
+        this.paperId = paperId;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+}

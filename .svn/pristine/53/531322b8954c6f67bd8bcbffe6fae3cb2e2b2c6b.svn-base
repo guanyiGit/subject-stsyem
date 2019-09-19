@@ -1,0 +1,21 @@
+package com.system.mapper;
+
+import com.system.entity.TSubjectBank;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+public interface TSubjectBankMapper {
+
+    int deleteByPrimaryKey(Integer subjectId);
+
+    int insert(TSubjectBank record);
+
+    int insertSelective(TSubjectBank record);
+
+    TSubjectBank selectByPrimaryKey(Integer subjectId);
+
+    int updateByPrimaryKeySelective(TSubjectBank record);
+
+    int updateByPrimaryKey(TSubjectBank record);
+}

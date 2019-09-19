@@ -1,0 +1,79 @@
+package com.system.pojo.rt;
+
+import java.time.LocalDate;
+
+public class ExamRecord {
+
+    /**
+     * 記錄id
+     */
+    private Integer recordId;
+    /**
+     * 第几次考试
+     */
+    private Integer seq;
+    /**
+     * 得分
+     */
+    private Integer score;
+    /**
+     * 开始时间
+     */
+    private LocalDate startTime;
+    /**
+     * 结束时间
+     */
+    private LocalDate endTime;
+    /**
+     * 使用时间
+     */
+    private Long useTime;
+
+    public Integer getRecordId() {
+        return recordId;
+    }
+
+    public void setRecordId(Integer recordId) {
+        this.recordId = recordId;
+    }
+
+    public Integer getSeq() {
+        return seq;
+    }
+
+    public void setSeq(Integer seq) {
+        this.seq = seq;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public LocalDate getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDate startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDate getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDate endTime) {
+        this.endTime = endTime;
+    }
+
+    public Long getUseTime() {
+        return useTime;
+    }
+
+    public void setUseTime(Long useTime) {
+        this.useTime = useTime;
+    }
+}

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.TUserMapper" >
+  <resultMap id="BaseResultMap" type="com.system.entity.TUser" >
+    <id column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_id, username, password, name, phone, status, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.system.entity.TUser" >
+    insert into t_user (user_id, username, password, 
+      name, phone, status, 
+      create_time)
+    values (#{userId,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.entity.TUser" >
+    insert into t_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.system.entity.TUser" >
+    update t_user
+    <set >
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.system.entity.TUser" >
+    update t_user
+    set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+
+  <!--列表-->
+  <select id="findUserList" resultType="com.system.VO.UserVO">
+    SELECT
+    u.*, r.role_name
+    FROM
+    t_user u
+    LEFT JOIN t_user_ref_role ref ON u.user_id = ref.user_id
+    LEFT JOIN t_role r ON ref.role_id = r.role_id
+    <where>
+      <if test="role!=999">
+        r.role_id  = #{role}
+      </if>
+      <if test="searchKey !=null and searchKey != ''">
+        and (u.name LIKE CONCAT("%",#{searchKey},"%")
+            or u.phone =#{searchKey}
+        )
+      </if>
+    </where>
+    limit #{index},#{pageSize}
+  </select>
+
+
+  <select id="countExam" resultType="java.lang.Integer">
+    SELECT
+    count(*)
+    FROM
+    t_user u
+    LEFT JOIN t_user_ref_role ref ON u.user_id = ref.user_id
+    LEFT JOIN t_role r ON ref.role_id = r.role_id
+    <where>
+      <if test="role!=999">
+        r.role_id  = #{role}
+      </if>
+      <if test="searchKey !=null and searchKey != ''">
+        and (u.name LIKE CONCAT("%",#{searchKey},"%")
+        or u.phone =#{searchKey}
+        )
+      </if>
+    </where>
+  </select>
+
+  <select id="detail" resultType="com.system.VO.UserVO">
+     SELECT
+    u.*, r.role_name
+    FROM
+    t_user u
+    LEFT JOIN t_user_ref_role ref ON u.user_id = ref.user_id
+    LEFT JOIN t_role r ON ref.role_id = r.role_id
+    where u.user_id=#{id}
+  </select>
+
+
+  <!--角色列表-->
+  <select id="findRoleList" resultType="com.system.entity.TRole">
+    select * from t_role
+  </select>
+</mapper>
